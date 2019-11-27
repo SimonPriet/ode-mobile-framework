@@ -1,35 +1,45 @@
-import * as React from "react";
+import * as React from "react"
 
-export interface IProps {
-  navigation: any;
+
+export interface INotifyProps {
+  navigation: any,
+  upload: any
 }
 
-function withNavigationWrapper<T extends IProps>(WrappedComponent: React.ComponentType<T>): React.ComponentType<T> {
-  return class extends React.Component<T> {
-    childRoute: any = null;
-    childParams: any = null;
 
-    public componentDidUpdate(): void {
-      const { navigation } = this.props;
-      const childRoute: any = navigation.getParam("childRoute");
+export default function withNavigationWrapper(WrappedComponent: React.Component): React.Component {
+  class HOC extends React.Component<INotifyProps> {
+    filter: string | null = null
+    contentUri:string | null = null
+
+    public componentWillMount(): boolean {
+      return this._handleNavigation(this.props.navigation);
+    }
+
+    // permits to manage push notif navigation and app linking
+    public shouldComponentUpdate(nextProps: Readonly<any>): boolean {
+      return this._handleNavigation(nextProps.navigation);
+    }
+
+    private _handleNavigation(navigation: any) {
+      const childRoute: string = navigation.getParam("childRoute");
       const childParams: any = navigation.getParam("childParams");
 
-      if (childRoute && childParams) {
-        if (childRoute != this.childRoute || childParams != this.childParams) {
-          this.childRoute = childRoute;
-          this.childParams = childParams;
-          navigation.setParams({ childRoute: undefined });
-          navigation.setParams({ childParams: undefined });
-          navigation.push(childRoute, childParams);
-        }
+      if (childRoute && childParams && childParams.filter !== this.filter) {
+        this.filter = childParams.filter;
+        navigation.push(
+          childRoute,
+          navigation.getParam("childParams"));
+        return false;
       }
+      return true;
     }
 
     render() {
       return <WrappedComponent {...this.props} />;
     }
-  };
-}
+  }
 
-export default (wrappedComponent: React.ComponentType<any>): React.ComponentType<any> =>
-  withNavigationWrapper(wrappedComponent);
+  HOC.navigationOptions = WrappedComponent.navigationOptions;
+  return HOC;
+}
