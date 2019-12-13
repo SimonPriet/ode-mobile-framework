@@ -56,7 +56,7 @@ class AppStoreUnconnected extends React.Component<
   public render() {
     return (
       <Provider store={this.props.store}>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, position: 'relative', backgroundColor: 'transparent' }}>
           <StatusBar
             backgroundColor={CommonStyles.statusBarColor}
             barStyle="light-content"
