@@ -1,6 +1,6 @@
 // RN Imports
 import * as React from "react";
-import { StatusBar, View, AppState } from "react-native";
+import {StatusBar, View} from "react-native";
 import * as RNLocalize from "react-native-localize";
 
 // Redux
@@ -55,7 +55,7 @@ class AppStoreUnconnected extends React.Component<
   public render() {
     return (
       <Provider store={this.props.store}>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, position: 'relative', backgroundColor: 'transparent' }}>
           <StatusBar
             backgroundColor={CommonStyles.statusBarColor}
             barStyle="light-content"

@@ -2,6 +2,7 @@ import { IItem } from "../states";
 
 export enum EVENT_TYPE {
   DOWNLOAD,
+  MENU_SELECT,
   PREVIEW,
   SELECT,
   SHARE,

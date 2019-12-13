@@ -11,10 +11,12 @@ export interface ButtonTextIconProps {
   children?: any,
   disabled?: boolean;
   name: string,
+  size?: number,
   whiteSpace?: string;
 }
 
 const Container = style.view({
+  display: 'flex',
   alignItems: "center",
   justifyContent: "space-evenly",
 });
@@ -22,17 +24,17 @@ const Container = style.view({
 const TouchableOpacity = style.touchableOpacity( {
     alignItems: "center",
     justifyContent: "center",
-    width: layoutSize.LAYOUT_42,
-    height: layoutSize.LAYOUT_42,
-    borderRadius: layoutSize.LAYOUT_20,
+    width: layoutSize.LAYOUT_48,
+    height: layoutSize.LAYOUT_48,
+    borderRadius: layoutSize.LAYOUT_24,
     backgroundColor: CommonStyles.profileTypes.Student,
   });
 
-export const ButtonIconText = ({ name, onPress, children }: ButtonTextIconProps) => {
+export const ButtonIconText = ({ name, onPress, children, size }: ButtonTextIconProps) => {
   return (
     <Container>
       <TouchableOpacity onPress={onPress}>
-        <Icon color="white" size={layoutSize.LAYOUT_24} name={name} />
+        <Icon color="white" size={size ? size : layoutSize.LAYOUT_24} name={name} />
       </TouchableOpacity>
       <TextBold15>{children}</TextBold15>
     </Container>

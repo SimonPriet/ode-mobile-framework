@@ -23,6 +23,7 @@ export const CommonStyles = {
   borderBottomItem: "#dddddd",
   // borderBottomNewsItem: "#e7e7e7",
   borderColorLighter: "#e2e2e2",
+  borderColorVeryLighter: "#e2e2e299",
   // cardTitle: "#1467ff",
   elevation: 20,
   entryfieldBorder: "#DCDDE0",

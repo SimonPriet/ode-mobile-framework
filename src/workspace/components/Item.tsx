@@ -25,12 +25,12 @@ const style = StyleSheet.create({
     color: CommonStyles.shadowColor,
     fontSize: layoutSize.LAYOUT_14,
   },
-  date: { flex: 1, alignItems: "flex-start" },
-  author: { flex: 3, alignItems: "flex-end" },
+  date: { flex: 1, alignItems: 'flex-start' },
+  author: { flex: 3, alignItems: 'flex-end' },
 });
 
 export const Item = ({ onEvent, ...item }: IItem & IEventProps) => {
-  const { id, isFolder, name, date, ownerName = "", contentType } = item;
+  const { id, isFolder, name, date, ownerName = '', contentType } = item;
   const longOwnerName = `${I18n.t("by")}${ownerName}`;
 
   return (
@@ -41,7 +41,7 @@ export const Item = ({ onEvent, ...item }: IItem & IEventProps) => {
           {name}
         </Text>
         {date != 0 && ownerName.length > 0 && (
-          <View style={{ flexDirection: "row" }}>
+          <View style={{ flexDirection: 'row' }}>
             {date != 0 && (
               <View style={style.date}>
                 <DateView min date={date} />

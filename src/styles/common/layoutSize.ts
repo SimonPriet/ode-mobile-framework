@@ -80,6 +80,7 @@ export const layoutSize = {
     LAYOUT_160: normalize(160),
     LAYOUT_180: normalize(180),
     LAYOUT_200: normalize(200),
+    LAYOUT_220: normalize(220),
     LAYOUT_250: normalize(250),
     LAYOUT_275: normalize(275),
     LAYOUT_290: normalize(290),
