@@ -1,46 +1,13 @@
 import * as React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
-import { IEventProps, IItem, EVENT_TYPE } from '../../workspace/types';
-
-import { Text } from '../../ui/text';
-import { CenterPanel, LeftIconPanel } from '../../ui/ContainerContent';
-import { layoutSize } from '../../styles/common/layoutSize';
+import { CenterPanel, LeftIconPanel } from '../ContainerContent';
 import { Icon } from '..';
+import { IEventProps, EVENT_TYPE } from '../../types';
+import { IMenuItem } from './types';
+import { layoutSize } from '../../styles/common/layoutSize';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import { Text } from '../text';
 
-const style = StyleSheet.create({
-  fileName: {
-    color: '#ffffff',
-    fontSize: layoutSize.LAYOUT_14,
-  },
-  touchPanel: {
-    backgroundColor: '#ff8000',
-    flexDirection: 'row',
-    flex: 1,
-    paddingLeft: 5,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
-  leftPanel: {
-    backgroundColor: '#ff8000',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    width: layoutSize.LAYOUT_58,
-    flexGrow: 0,
-    margin: 2,
-    padding: 2,
-  },
-  centerPanel: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    flexGrow: 3,
-    margin: 2,
-    marginLeft: -20,
-  },
-});
-
-const Item = ({ onEvent, ...item }: IItem & IEventProps) => {
+const Item = ({ onEvent, ...item }: IEventProps & IMenuItem) => {
   const { icon, text } = item;
 
   return (
@@ -58,3 +25,37 @@ const Item = ({ onEvent, ...item }: IItem & IEventProps) => {
 };
 
 export default Item;
+
+const style = StyleSheet.create({
+  centerPanel: {
+    alignItems: 'center',
+    backgroundColor: '#ff8000',
+    flexDirection: 'row',
+    flexGrow: 3,
+    justifyContent: 'flex-start',
+    margin: 2,
+    marginLeft: -20,
+  },
+  fileName: {
+    color: '#ffffff',
+    fontSize: layoutSize.LAYOUT_14,
+  },
+  leftPanel: {
+    backgroundColor: '#ff8000',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    width: layoutSize.LAYOUT_58,
+    flexGrow: 0,
+    margin: 2,
+    padding: 2,
+  },
+  touchPanel: {
+    backgroundColor: '#ff8000',
+    flexDirection: 'row',
+    flex: 1,
+    paddingLeft: 5,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+});

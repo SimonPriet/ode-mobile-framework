@@ -1,4 +1,4 @@
-import { IItem } from "../states";
+import { IItem } from '../workspace/types/states';
 
 export enum EVENT_TYPE {
   DOWNLOAD,
@@ -9,6 +9,5 @@ export enum EVENT_TYPE {
 }
 
 export interface IEventProps {
-  onEvent: (type: EVENT_TYPE, item: IItem) => void
+  onEvent: (type: EVENT_TYPE, item: IItem) => void;
 }
-

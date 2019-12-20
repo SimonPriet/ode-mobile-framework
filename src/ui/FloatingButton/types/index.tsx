@@ -1,7 +1,12 @@
-import { IItem } from '../../../workspace/types/states';
+import { IItem } from '../../../types';
+import { IEventProps } from '../../../types';
 
 export type IMenuItem = IItem & {
-  onEvent: Function;
-  icon?: string;
-  text?: string;
+  icon: string;
+  name: string;
+  text: string;
+};
+
+export type IFloatingProps = IEventProps & {
+  actions: IMenuItem[];
 };

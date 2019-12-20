@@ -1,57 +1,23 @@
-import React, { Component } from "react"; // eslint-disable-line
-import PropTypes from 'prop-types';
-import { StyleSheet, Animated, TouchableOpacity, Keyboard, View, FlatList } from 'react-native';
-
+import React, { Component } from 'react';
+import { StyleSheet, Animated, Keyboard, View, FlatList } from 'react-native';
 import FloatingActionItem from './FloatingActionItem';
-
 import { layoutSize } from '../../styles/common/layoutSize';
 import { CommonStyles } from '../../styles/common/styles';
 import { Icon } from '..';
-import { EVENT_TYPE, IEventProps } from '../../workspace/types/props';
-import { IItem, IRootItems } from '../../workspace/types/states/items';
+import { EVENT_TYPE, IItem } from '../../types';
+import { IFloatingProps, IMenuItem } from './types';
+import { ButtonIconText } from '..';
 
-interface IProps {
-  iconWidth: number;
-  iconHeight: number;
-  color: string;
-  visible: false;
-  buttonSize: number;
-  onPressItem: Function;
-}
+class FloatingAction extends Component<IFloatingProps, IState> {
+  state = {
+    active: false,
+  };
 
-interface IState {
-  active: boolean;
-}
-
-FloatingAction.propTypes = {
-  actions: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      text: PropTypes.string,
-      component: PropTypes.func,
-    })
-  ),
-
-};
-
-FloatingAction.defaultProps = {
-  visible: true,
-  color: '#fa8810',
-  buttonSize: layoutSize.LAYOUT_48,
-  iconColor: '#fff',
-};
-
-class FloatingAction extends Component<IRootItems<IItem> & IEventProps & IProps, IState> {
-  constructor(props: any) {
-    super(props);
-
-    this.state = {
-      active: false,
-    };
-  }
+  visible = true;
 
   getShadow = () => {
     return {
+      elevation: 10,
       shadowColor: '#000',
       shadowOffset: {
         width: 5,
@@ -59,15 +25,7 @@ class FloatingAction extends Component<IRootItems<IItem> & IEventProps & IProps,
       },
       shadowOpacity: 0.45,
       shadowRadius: 3.84,
-      elevation: 10,
     };
-  };
-
-  getIcon = () => {
-    const { iconWidth, iconHeight } = this.props;
-    const iconName = this.state.active ? 'close' : 'add';
-
-    return <Icon style={{ color: '#ffffff', width: iconWidth, height: iconHeight }} name={iconName} />;
   };
 
   reset = () => {
@@ -90,34 +48,21 @@ class FloatingAction extends Component<IRootItems<IItem> & IEventProps & IProps,
     }
   };
 
-  onEvent = (type: EVENT_TYPE, menuItem: IItem) => {
+  handleEvent = (type: EVENT_TYPE, item: IItem): void => {
     const { onEvent } = this.props;
 
     if (onEvent) {
-      onEvent(EVENT_TYPE.MENU_SELECT, menuItem);
+      onEvent(EVENT_TYPE.MENU_SELECT, item);
     }
 
     this.reset();
   };
 
   renderMainButton() {
-    const { buttonSize, color } = this.props;
-    const propStyles = {
-      backgroundColor: color,
-    };
-
-    const sizeStyle = {
-      width: buttonSize,
-      height: buttonSize,
-      borderRadius: buttonSize / 2,
-    };
+    const iconName = this.state.active ? 'close' : 'add';
 
     return (
-      <Animated.View style={[styles.buttonContainer, sizeStyle, propStyles, this.getShadow()]}>
-        <TouchableOpacity style={[styles.button, sizeStyle]} activeOpacity={0.85} onPress={this.animateButton}>
-          <Animated.View style={[styles.buttonTextContainer, sizeStyle]}>{this.getIcon()}</Animated.View>
-        </TouchableOpacity>
-      </Animated.View>
+      <ButtonIconText style={styles.button} name={iconName} onPress={this.animateButton} size={layoutSize.LAYOUT_20} />
     );
   }
 
@@ -130,14 +75,13 @@ class FloatingAction extends Component<IRootItems<IItem> & IEventProps & IProps,
     }
 
     return (
-      <Animated.View style={styles.actions} pointerEvents="box-none">
-        <FlatList
-          data={actions}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
-          keyExtractor={(item: IItem) => item.name}
-          renderItem={({ item }) => <FloatingActionItem {...item} onEvent={this.onEvent.bind(this)} />}
-        />
-      </Animated.View>
+      <FlatList
+        contentContainerStyle={styles.actions}
+        data={actions}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+        keyExtractor={(item: IMenuItem) => item.name}
+        renderItem={({ item }) => <FloatingActionItem {...item} onEvent={this.handleEvent.bind(this)} />}
+      />
     );
   }
 
@@ -151,44 +95,40 @@ class FloatingAction extends Component<IRootItems<IItem> & IEventProps & IProps,
   }
 }
 
+interface IState {
+  active: boolean;
+}
+
 const styles = StyleSheet.create({
   actions: {
+    elevation: 10,
+    borderRadius: layoutSize.LAYOUT_6,
+    overflow: 'hidden',
+    backgroundColor: '#ffffff',
     position: 'absolute',
     right: layoutSize.LAYOUT_10,
     top: layoutSize.LAYOUT_36,
     width: layoutSize.LAYOUT_200,
-    borderRadius: 10,
-    backgroundColor: '#ff8000',
+    zIndex: 10,
+  },
+  button: {
+    elevation: 10,
+    position: 'absolute',
+    right: layoutSize.LAYOUT_10,
+    top: -layoutSize.LAYOUT_26,
+    zIndex: 10,
+  },
+  overlay: {
+    bottom: 0,
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
   },
   separator: {
     borderBottomColor: CommonStyles.borderColorVeryLighter,
     borderBottomWidth: 1,
     width: '100%',
-  },
-  overlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  buttonContainer: {
-    position: 'absolute',
-    right: layoutSize.LAYOUT_10,
-    top: -layoutSize.LAYOUT_26,
-    zIndex: 20,
-    elevation: 20,
-  },
-  button: {
-    zIndex: 3,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#ff8000',
-  },
-  buttonTextContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
 

@@ -1,12 +1,4 @@
-import { IRight } from './right';
-
-export type IItem = IRight & {
-  contentType?: string;
-  date: number;
-  id: string;
-  name: string;
-  isFolder: boolean;
-};
+import { IItem } from '../../../types';
 
 export type IFile = IItem & {
   filename: string;
