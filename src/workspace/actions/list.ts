@@ -3,22 +3,17 @@
  * Build actions to be dispatched to the hworkspace list reducer.
  */
 
-import {
-  asyncActionTypes,
-} from "../../infra/redux/async";
-import config from "../config";
-import { IItems, IFiltersParameters, IItem } from "../types";
-import { getFolders } from "./helpers/folders";
-import { getDocuments } from "./helpers/documents";
+import { asyncActionTypes } from '../../infra/redux/async';
+import config from '../config';
+import { IItems, IFiltersParameters, IItem } from '../types';
+import { getFolders } from './helpers/folders';
+import { getDocuments } from './helpers/documents';
 
 // ACTION LIST ------------------------------------------------------------------------------------
 
+export const actionTypesList = asyncActionTypes(config.createActionType('WORKSPACE_LIST'));
 
-export const actionTypesList = asyncActionTypes(
-  config.createActionType("WORKSPACE_LIST")
-);
-
-export function listRequested( id: string | undefined) {
+export function listRequested(id: string | undefined) {
   return { type: actionTypesList.requested, id };
 }
 

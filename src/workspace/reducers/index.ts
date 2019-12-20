@@ -1,6 +1,6 @@
-import { combineReducers } from "redux";
-import items from "./items";
-import {IState} from "../types";
+import { combineReducers } from 'redux';
+import items from './items';
+import { IState } from '../types';
 
 const rootReducer = combineReducers<IState>({
   items,

@@ -1,7 +1,7 @@
-import * as React from "react"
+import * as React from 'react';
 
 export interface INotifyProps {
-  navigation: any,
+  navigation: any;
 }
 
 export default function withNavigationWrapper(WrappedComponent: React.Component): React.Component {
@@ -9,21 +9,18 @@ export default function withNavigationWrapper(WrappedComponent: React.Component)
     childRoute: any = null;
     childParams: any = null;
 
-
     public componentDidUpdate(): void {
-      const {navigation} = this.props;
-      const childRoute: any = navigation.getParam("childRoute");
-      const childParams: any = navigation.getParam("childParams");
+      const { navigation } = this.props;
+      const childRoute: any = navigation.getParam('childRoute');
+      const childParams: any = navigation.getParam('childParams');
 
       if (childRoute && childParams) {
         if (childRoute != this.childRoute || childParams != this.childParams) {
           this.childRoute = childRoute;
           this.childParams = childParams;
-          navigation.setParams({"childRoute": undefined});
-          navigation.setParams({"childParams": undefined});
-          navigation.push(
-            childRoute,
-            childParams);
+          navigation.setParams({ childRoute: undefined });
+          navigation.setParams({ childParams: undefined });
+          navigation.push(childRoute, childParams);
         }
       }
     }

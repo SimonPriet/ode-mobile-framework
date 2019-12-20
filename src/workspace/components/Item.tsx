@@ -1,25 +1,25 @@
-import * as React from "react";
-import { View, StyleSheet } from "react-native";
-import I18n from "i18n-js";
-import { IEventProps, IItem, EVENT_TYPE } from "../types";
+import * as React from 'react';
+import { View, StyleSheet } from 'react-native';
+import I18n from 'i18n-js';
+import { IEventProps, IItem, EVENT_TYPE } from '../types';
 
-import { Text, NestedText } from "../../ui/text";
-import { CenterPanel, LeftIconPanel, ListItem } from "../../ui/ContainerContent";
-import { DateView } from "../../ui/DateView";
-import { renderIcon } from "../utils/image";
-import { layoutSize } from "../../styles/common/layoutSize";
-import { CommonStyles } from "../../styles/common/styles";
+import { Text, NestedText } from '../../ui/text';
+import { CenterPanel, LeftIconPanel, ListItem } from '../../ui/ContainerContent';
+import { DateView } from '../../ui/DateView';
+import { renderIcon } from '../utils/image';
+import { layoutSize } from '../../styles/common/layoutSize';
+import { CommonStyles } from '../../styles/common/styles';
 
 const style = StyleSheet.create({
   item_flexrow: {
-    backgroundColor: "white",
-    flexDirection: "row",
+    backgroundColor: 'white',
+    flexDirection: 'row',
     paddingHorizontal: layoutSize.LAYOUT_16,
     paddingVertical: layoutSize.LAYOUT_12,
   },
   centerPanel: {
-    alignItems: "stretch",
-    justifyContent: "space-around",
+    alignItems: 'stretch',
+    justifyContent: 'space-around',
   },
   fileName: {
     color: CommonStyles.shadowColor,
@@ -31,10 +31,10 @@ const style = StyleSheet.create({
 
 export const Item = ({ onEvent, ...item }: IItem & IEventProps) => {
   const { id, isFolder, name, date, ownerName = '', contentType } = item;
-  const longOwnerName = `${I18n.t("by")}${ownerName}`;
+  const longOwnerName = `${I18n.t('by')}${ownerName}`;
 
   return (
-    <ListItem borderBottomWidth={0} onPress={() => onEvent(EVENT_TYPE.SELECT, item)}>
+    <ListItem borderBottomWidth={0} onPress={() => onEvent({ type: EVENT_TYPE.SELECT, ...item })}>
       <LeftIconPanel>{renderIcon(id, isFolder, name, contentType)}</LeftIconPanel>
       <CenterPanel style={style.centerPanel}>
         <Text numberOfLines={1} style={style.fileName}>
@@ -55,8 +55,7 @@ export const Item = ({ onEvent, ...item }: IItem & IEventProps) => {
                   style={{
                     fontSize: layoutSize.LAYOUT_10,
                     color: CommonStyles.lightTextColor,
-                  }}
-                >
+                  }}>
                   {longOwnerName}
                 </NestedText>
               </View>

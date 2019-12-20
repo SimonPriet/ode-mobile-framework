@@ -1,8 +1,8 @@
 import { createStackNavigator } from 'react-navigation';
 import ContainerItems from './containers/Items';
 import { Details } from './containers/Details';
-
-function alert(item: IItem)
+import { IEvent } from '../types/ievents';
+import { Alert } from 'react-native';
 
 export default createStackNavigator({
   Workspace: {
@@ -14,15 +14,14 @@ export default createStackNavigator({
         {
           text: 'Ajouter Document',
           icon: 'file-plus',
-          name: 'addDocument',
-          position: 1,
-          onEvent: (item: IItem)
+          id: 'addDocument',
+          onSelect: (dispatch: Function, event: IEvent) => Alert.alert('Element selected' + event.id),
         },
         {
           text: 'Créer dossier',
           icon: 'folder11',
-          name: 'AddFolder',
-          position: 2,
+          id: 'AddFolder',
+          onSelect: (dispatch: Function, event: IEvent) => Alert.alert('Element selected' + event.id),
         },
       ],
     },
