@@ -1,4 +1,4 @@
-import { FilterId, IFiltersParameters } from "./filters";
+import { FilterId, IFiltersParameters } from './filters';
 import {
   IItemsProps,
   IDataItemsProps,
@@ -7,9 +7,9 @@ import {
   IEventProps,
   INavigationProps,
   EVENT_TYPE,
-} from "./props";
-import { IItem, IItems, IFolder, IFile, IState } from "./states";
-import { ContentUri } from "../../types/contentUri";
+} from './props';
+import { IItem, IItems, IFolder, IFile, IState } from './states';
+import { ContentUri } from '../../types/contentUri';
 
 export {
   ContentUri,

@@ -1,13 +1,14 @@
-import React, { Component } from "react";
-import { FlatList, Keyboard, StyleSheet, View } from "react-native";
-import FloatingActionItem from "./FloatingActionItem";
-import { layoutSize } from "../../styles/common/layoutSize";
-import { CommonStyles } from "../../styles/common/styles";
-import { IFloatingProps, IMenuItem } from "../types";
-import { ButtonIconText } from "..";
-import { INbSelected } from "../Toolbar/Toolbar";
+import React, { Component } from 'react';
+import { StyleSheet, Animated, Keyboard, View, FlatList } from 'react-native';
+import FloatingActionItem from './FloatingActionItem';
+import { layoutSize } from '../../styles/common/layoutSize';
+import { CommonStyles } from '../../styles/common/styles';
+import { Icon } from '..';
+import { EVENT_TYPE, IItem } from '../../types';
+import { IFloatingProps, IMenuItem } from './types';
+import { ButtonIconText } from '..';
 
-class FloatingAction extends Component<IFloatingProps & INbSelected, IState> {
+class FloatingAction extends Component<IFloatingProps, IState> {
   state = {
     active: false,
   };
@@ -17,7 +18,7 @@ class FloatingAction extends Component<IFloatingProps & INbSelected, IState> {
   getShadow = () => {
     return {
       elevation: 10,
-      shadowColor: "#000",
+      shadowColor: '#000',
       shadowOffset: {
         width: 5,
         height: 8,
@@ -47,22 +48,18 @@ class FloatingAction extends Component<IFloatingProps & INbSelected, IState> {
     }
   };
 
-  handleEvent = (event: any): void => {
+  handleEvent = (type: EVENT_TYPE, item: IItem): void => {
     const { onEvent } = this.props;
 
     if (onEvent) {
-      onEvent(event);
+      onEvent(EVENT_TYPE.MENU_SELECT, item);
     }
+
     this.reset();
   };
 
   renderMainButton() {
-    const { menuItems } = this.props;
-    const iconName = this.state.active ? "close" : "add";
-
-    if (!menuItems || menuItems.length === 0) {
-      return null;
-    }
+    const iconName = this.state.active ? 'close' : 'add';
 
     return (
       <ButtonIconText style={styles.button} name={iconName} onPress={this.animateButton} size={layoutSize.LAYOUT_20} />
@@ -70,31 +67,25 @@ class FloatingAction extends Component<IFloatingProps & INbSelected, IState> {
   }
 
   renderActions() {
-    const { menuItems } = this.props;
+    const { actions } = this.props;
     const { active } = this.state;
 
-    if (!active || !menuItems || menuItems.length === 0) {
+    if (!active || !actions || actions.length === 0) {
       return undefined;
     }
 
     return (
       <FlatList
         contentContainerStyle={styles.actions}
-        data={menuItems}
+        data={actions}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
-        keyExtractor={(item: IMenuItem) => item.id}
-        renderItem={({ item }) => <FloatingActionItem item={item} onEvent={this.handleEvent.bind(this)} />}
+        keyExtractor={(item: IMenuItem) => item.name}
+        renderItem={({ item }) => <FloatingActionItem {...item} onEvent={this.handleEvent.bind(this)} />}
       />
     );
   }
 
   render() {
-    const { nbSelected } = this.props;
-
-    if (nbSelected) {
-      return null;
-    }
-
     return (
       <View style={styles.overlay}>
         {this.renderMainButton()}
@@ -112,9 +103,9 @@ const styles = StyleSheet.create({
   actions: {
     elevation: 10,
     borderRadius: layoutSize.LAYOUT_6,
-    overflow: "visible",
-    backgroundColor: "#ffffff",
-    position: "absolute",
+    overflow: 'hidden',
+    backgroundColor: '#ffffff',
+    position: 'absolute',
     right: layoutSize.LAYOUT_10,
     top: layoutSize.LAYOUT_36,
     width: layoutSize.LAYOUT_200,
@@ -122,7 +113,7 @@ const styles = StyleSheet.create({
   },
   button: {
     elevation: 10,
-    position: "absolute",
+    position: 'absolute',
     right: layoutSize.LAYOUT_10,
     top: -layoutSize.LAYOUT_26,
     zIndex: 10,
@@ -130,14 +121,14 @@ const styles = StyleSheet.create({
   overlay: {
     bottom: 0,
     left: 0,
-    position: "absolute",
+    position: 'absolute',
     right: 0,
     top: 0,
   },
   separator: {
     borderBottomColor: CommonStyles.borderColorVeryLighter,
     borderBottomWidth: 1,
-    width: "100%",
+    width: '100%',
   },
 });
 
