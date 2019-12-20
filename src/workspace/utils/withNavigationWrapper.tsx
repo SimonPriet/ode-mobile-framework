@@ -1,31 +1,11 @@
 import * as React from 'react';
-import { NavigationScreenProp } from 'react-navigation';
-import { HeaderAction, HeaderIcon } from '../../ui/headers/NewHeader';
-import { standardNavScreenOptions } from '../../navigation/helpers/navScreenOptions';
-import I18n from 'i18n-js';
-import config from '../config';
-import { ViewStyle } from 'react-native';
 
 export interface INotifyProps {
   navigation: any;
 }
 
-const HeaderBackAction = ({ navigation, style }: { navigation: NavigationScreenProp<{}>; style?: ViewStyle }) => {
-  return <HeaderAction onPress={() => navigation.pop()} name={'back'} style={style} />;
-};
-
 export default function withNavigationWrapper(WrappedComponent: React.Component): React.Component {
   class HOC extends React.Component<INotifyProps> {
-    static navigationOptions = ({ navigation }: { navigation: NavigationScreenProp<{}> }) => {
-      return standardNavScreenOptions(
-        {
-          title: navigation.getParam('title') || I18n.t(config.displayName),
-          headerLeft: <HeaderBackAction navigation={navigation} />,
-          headerRight: <HeaderIcon name={null} hidden={true} />,
-        },
-        navigation,
-      );
-    };
     childRoute: any = null;
     childParams: any = null;
 
@@ -49,5 +29,7 @@ export default function withNavigationWrapper(WrappedComponent: React.Component)
       return <WrappedComponent {...this.props} />;
     }
   }
+
+  HOC.navigationOptions = WrappedComponent.navigationOptions;
   return HOC;
 }
