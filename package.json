@@ -1,6 +1,6 @@
 {
   "name": "appe",
-  "version": "1.0.0-SNAPSHOT",
+  "version": "0.3.1",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -22,9 +22,10 @@
   "dependencies": {
     "@react-native-community/netinfo": "4.1.2",
     "@react-native-community/push-notification-ios": "github:react-native-community/react-native-push-notification-ios#dcef241",
-    "appcenter": "2.6.1",
-    "appcenter-analytics": "2.6.1",
-    "appcenter-crashes": "2.6.1",
+    "@types/recompose": "^0.30.7",
+    "appcenter": "^2.4.0",
+    "appcenter-analytics": "^2.4.0",
+    "appcenter-crashes": "^2.4.0",
     "base-64": "0.1.0",
     "buffer": "^5.4.3",
     "deepmerge": "4.0.0",
@@ -72,6 +73,7 @@
     "react-navigation-stack": "^1.10.3",
     "react-navigation-tabs": "^2.6.2",
     "react-redux": "7.1.0",
+    "recompose": "^0.30.0",
     "redux": "4.0.4",
     "redux-thunk": "2.3.0",
     "rn-fetch-blob": "^0.11.2",

@@ -1,10 +1,9 @@
-import { combineReducers } from "redux";
-import items from "./items";
-import selected from "./select";
+import { combineReducers } from 'redux';
+import items from './items';
+import { IState } from '../types';
 
-const rootReducer = combineReducers<any>({
+const rootReducer = combineReducers<IState>({
   items,
-  selected,
 });
 
 export default rootReducer;

@@ -1,22 +1,29 @@
-import * as React from "react";
-import { FlatList, StyleSheet, View } from "react-native";
-import { connect } from "react-redux";
-import { NavigationEventSubscription } from "react-navigation";
-import config from "../config";
-import { FilterId, IItem, IItemsProps, IState } from "../types";
-import { Item } from "../components";
-import { listAction } from "../actions/list";
-import { CommonStyles } from "../../styles/common/styles";
-import { layoutSize } from "../../styles/common/layoutSize";
-import ConnectionTrackingBar from "../../ui/ConnectionTrackingBar";
-import { getEmptyScreen } from "../utils/empty";
-import { PageContainer } from "../../ui/ContainerContent";
-import { Loading, ProgressBar } from "../../ui";
-import { removeAccents } from "../../utils/string";
-import withUploadWrapper from "../utils/withUploadWrapper";
-import withMenuWrapper from "../utils/withMenuWrapper";
-import withNavigationWrapper from "../utils/withNavigationWrapper";
-import { ISelectedProps } from "../../types/ievents";
+import * as React from 'react';
+import { Alert, FlatList, StyleSheet, View, ViewStyle } from 'react-native';
+import { connect } from 'react-redux';
+import I18n from 'i18n-js';
+import compose from 'recompose/compose';
+import { bindActionCreators } from 'redux';
+import { NavigationScreenProp, NavigationEventSubscription } from 'react-navigation';
+import config from '../config';
+import { standardNavScreenOptions } from '../../navigation/helpers/navScreenOptions';
+import { HeaderAction, HeaderIcon } from '../../ui/headers/NewHeader';
+import { EVENT_TYPE, FilterId, IItem, IItemsProps, IState, ContentUri } from '../types';
+import { Item } from '../components';
+import { listAction } from '../actions/list';
+import { CommonStyles } from '../../styles/common/styles';
+import { layoutSize } from '../../styles/common/layoutSize';
+import ConnectionTrackingBar from '../../ui/ConnectionTrackingBar';
+import { getEmptyScreen } from '../utils/empty';
+import { PageContainer } from '../../ui/ContainerContent';
+import { Loading, ProgressBar } from '../../ui';
+import { removeAccents } from '../../utils/string';
+import { uploadAction } from '../actions/upload';
+import pickFile from '../../infra/actions/pickFile';
+import withNavigationWrapper from '../utils/withNavigationWrapper';
+import { withUploadWrapper } from '../utils/withUploadWrapper';
+import { withMenuWrapper } from '../../infra/withMenuWrapper';
+import { IEvent } from '../../types/ievents';
 
 const styles = StyleSheet.create({
   separator: {
@@ -26,13 +33,46 @@ const styles = StyleSheet.create({
   },
 });
 
-export class Items extends React.PureComponent<IItemsProps & ISelectedProps, { isFocused: boolean }> {
+const HeaderBackAction = ({ navigation, style }: { navigation: NavigationScreenProp<{}>; style?: ViewStyle }) => {
+  return <HeaderAction onPress={() => navigation.pop()} name={'back'} style={style} />;
+};
+
+export class Items extends React.PureComponent<IItemsProps, { isFocused: boolean }> {
   focusListener!: NavigationEventSubscription;
 
+  static navigationOptions = ({ navigation }: { navigation: NavigationScreenProp<{}> }) => {
+    const headerRight =
+      navigation.getParam('parentId') != FilterId.owner ? (
+        <HeaderIcon name={null} hidden={true} />
+      ) : (
+        <HeaderAction name="plus" onPress={() => pickFile().then(navigation.state.params.upload)} />
+      );
+
+    return standardNavScreenOptions(
+      {
+        title: navigation.getParam('title') || I18n.t(config.displayName),
+        headerLeft: <HeaderBackAction navigation={navigation} />,
+        headerRight,
+      },
+      navigation,
+    );
+  };
+
   public componentDidMount() {
-    this.focusListener = this.props.navigation.addListener("willFocus", () => {
+    this.focusListener = this.props.navigation.addListener('willFocus', () => {
       this.makeRequest();
     });
+    this.props.navigation.setParams({
+      upload: this.upload.bind(this),
+    });
+  }
+
+  upload(content: ContentUri) {
+    if (content) {
+      this.props.uploadAction(content);
+    } else {
+      console.log('pick failed', content);
+    }
   }
 
   public componentWillUnmount() {
@@ -41,9 +81,27 @@ export class Items extends React.PureComponent<IItemsProps & ISelectedProps, { i
 
   public makeRequest() {
     this.props.listAction({
-      filter: this.props.navigation.getParam("filter"),
-      parentId: this.props.navigation.getParam("parentId"),
+      filter: this.props.navigation.getParam('filter'),
+      parentId: this.props.navigation.getParam('parentId'),
     });
+  }
+
+  public onEvent({ type, ...item }: IEvent & IItem) {
+    switch (type) {
+      case EVENT_TYPE.SELECT:
+        const { id: parentId, name: title, isFolder } = item;
+        const filterId = this.props.navigation.getParam('filter');
+        const filter = filterId == FilterId.root ? parentId : filterId;
+
+        isFolder
+          ? this.props.navigation.push('Workspace', { filter, parentId, title })
+          : this.props.navigation.push('WorkspaceDetails', { item, title });
+        return;
+
+      case EVENT_TYPE.MENU_SELECT:
+        Alert.alert(item.id);
+        return;
+    }
   }
 
   private sortItems(a: IItem, b: IItem): number {
@@ -66,13 +124,12 @@ export class Items extends React.PureComponent<IItemsProps & ISelectedProps, { i
     const { items, isFetching = false } = this.props;
 
     const getViewToRender = () => {
-      if (items === undefined) {
+      if (items == undefined) {
         return <Loading />;
       } else {
         const values = Object.values(items);
-        const parentId = this.props.navigation.getParam("parentId") || null;
+        const parentId = this.props.navigation.getParam('parentId') || null;
         const itemsArray = parentId === FilterId.root ? values : values.sort(this.sortItems);
-        const { selected } = this.props;
 
         return (
           <FlatList
@@ -83,7 +140,7 @@ export class Items extends React.PureComponent<IItemsProps & ISelectedProps, { i
             keyExtractor={(item: IItem) => item.id}
             refreshing={isFetching}
             onRefresh={() => this.makeRequest()}
-            renderItem={({ item }) => <Item item={item} onEvent={this.props.onEvent} selected={selected[item.id]} />}
+            renderItem={({ item }) => <Item {...item} onEvent={this.onEvent.bind(this)} />}
           />
         );
       }
@@ -99,19 +156,26 @@ export class Items extends React.PureComponent<IItemsProps & ISelectedProps, { i
   }
 }
 
-const getProps = (stateItems: IState, props: any) => {
-  const parentId = props.navigation.getParam("parentId");
+const mapStateToProps = (state: any, props: any) => {
+  const stateItems: IState = config.getLocalState(state).items;
+  const parentId = props.navigation.getParam('parentId');
   const parentIdItems = stateItems[parentId] || {};
   const isFetching = parentIdItems.isFetching || false;
+  const items = parentIdItems.data;
 
-  return { isFetching, items: parentIdItems.data };
+  return { items, isFetching };
 };
 
-const mapStateToProps = (state: any, props: any) => {
-  return { selected: state.workspace.selected, ...getProps(config.getLocalState(state).items, props) };
+const mapDispatchToProps = (dispatch: any) => {
+  return bindActionCreators({ listAction, uploadAction }, dispatch);
 };
 
-export default connect(
-  mapStateToProps,
-  { listAction }
-)(withMenuWrapper(withNavigationWrapper(withUploadWrapper(Items))));
+export default compose<IItemsProps, any>(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
+  withMenuWrapper,
+  withNavigationWrapper,
+  withUploadWrapper,
+)(Items);

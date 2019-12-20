@@ -1,9 +1,9 @@
-import { IItem } from '../../../types';
+import { IId } from '../../../types';
 import { IEventProps } from '../../../types';
 
-export type IMenuItem = IItem & {
+export type IMenuItem = IId & {
   icon: string;
-  name: string;
+  onSelect: Function;
   text: string;
 };
 

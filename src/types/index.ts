@@ -1,5 +1,5 @@
-import { IEventProps, EVENT_TYPE } from './events';
-import { IItem } from './items';
+import { IEventProps, EVENT_TYPE } from './ievents';
+import { IId } from './iid';
 import { INavigationProps } from './navigation';
 
-export { EVENT_TYPE, IEventProps, INavigationProps, IItem };
+export { EVENT_TYPE, IEventProps, INavigationProps, IId };

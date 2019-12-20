@@ -6,20 +6,13 @@ import { View } from 'react-native';
 export type IMenuProps = IEventProps &
   INavigationProps & {
     actions: any;
+    dispatch: Function;
   };
 
-interface IState {
-  event: any;
-}
-
 export function withMenuWrapper(WrappedComponent: React.Component): React.Component {
-  class HOC extends React.Component<IMenuProps, IState> {
-    state = {
-      event: null,
-    };
-
+  class HOC extends React.Component<IMenuProps> {
     handleEvent(event: any) {
-      this.setState({ ...event });
+      event.onSelect(this.props.dispatch, event);
     }
 
     render() {
@@ -28,7 +21,7 @@ export function withMenuWrapper(WrappedComponent: React.Component): React.Compon
 
       return (
         <View style={{ flex: 1 }}>
-          <WrappedComponent {...this.props} onEvent={this.state.event} />
+          <WrappedComponent {...this.props} />
           <FloatingAction actions={actions} onEvent={this.handleEvent.bind(this)} />
         </View>
       );

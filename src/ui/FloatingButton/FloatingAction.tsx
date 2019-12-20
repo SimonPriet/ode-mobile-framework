@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { StyleSheet, Animated, Keyboard, View, FlatList } from 'react-native';
+import { StyleSheet, Keyboard, View, FlatList } from 'react-native';
 import FloatingActionItem from './FloatingActionItem';
 import { layoutSize } from '../../styles/common/layoutSize';
 import { CommonStyles } from '../../styles/common/styles';
-import { Icon } from '..';
-import { EVENT_TYPE, IItem } from '../../types';
 import { IFloatingProps, IMenuItem } from './types';
 import { ButtonIconText } from '..';
 
@@ -48,11 +46,11 @@ class FloatingAction extends Component<IFloatingProps, IState> {
     }
   };
 
-  handleEvent = (type: EVENT_TYPE, item: IItem): void => {
+  handleEvent = (event: any): void => {
     const { onEvent } = this.props;
 
     if (onEvent) {
-      onEvent(EVENT_TYPE.MENU_SELECT, item);
+      onEvent(event);
     }
 
     this.reset();
@@ -79,7 +77,7 @@ class FloatingAction extends Component<IFloatingProps, IState> {
         contentContainerStyle={styles.actions}
         data={actions}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
-        keyExtractor={(item: IMenuItem) => item.name}
+        keyExtractor={(item: IMenuItem) => item.id}
         renderItem={({ item }) => <FloatingActionItem {...item} onEvent={this.handleEvent.bind(this)} />}
       />
     );

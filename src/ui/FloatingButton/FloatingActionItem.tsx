@@ -8,10 +8,10 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Text } from '../text';
 
 const Item = ({ onEvent, ...item }: IEventProps & IMenuItem) => {
-  const { icon, text } = item;
+  const { icon, text, id } = item;
 
   return (
-    <TouchableOpacity style={style.touchPanel} onPress={() => onEvent(EVENT_TYPE.SELECT, item)}>
+    <TouchableOpacity style={style.touchPanel} onPress={() => onEvent({ type: EVENT_TYPE.SELECT, ...item })}>
       <LeftIconPanel style={style.leftPanel}>
         <Icon color="#ffffff" size={layoutSize.LAYOUT_28} name={icon} />
       </LeftIconPanel>

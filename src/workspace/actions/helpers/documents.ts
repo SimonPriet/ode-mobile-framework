@@ -3,17 +3,16 @@
  * Build actions to be dispatched to the hworkspace list reducer.
  */
 
-import RNFB from "rn-fetch-blob";
-import moment from "moment";
-import { asyncGetJson } from "../../../infra/redux/async";
-import { IFiltersParameters, IFile, FilterId, IItem, ContentUri } from "../../types";
-import { filters } from "../../types/filters/helpers/filters";
-import Conf from "../../../../ode-framework-conf";
-import { OAuth2RessourceOwnerPasswordClient } from "../../../infra/oauth";
-import { progressAction, progressEndAction, progressInitAction } from "../../../infra/actions/progress";
-import { Platform, ToastAndroid } from "react-native";
-import I18n from "i18n-js";
-import { IRootItems } from "../../types/states/items";
+import RNFB from 'rn-fetch-blob';
+import moment from 'moment';
+import { asyncGetJson } from '../../../infra/redux/async';
+import { IItems, IFiltersParameters, IFile, FilterId, IItem, ContentUri } from '../../types';
+import { filters } from '../../types/filters/helpers/filters';
+import Conf from '../../../../ode-framework-conf';
+import { OAuth2RessourceOwnerPasswordClient } from '../../../infra/oauth';
+import { progressAction, progressEndAction, progressInitAction } from '../../../infra/actions/progress';
+import { Platform, ToastAndroid } from 'react-native';
+import I18n from 'i18n-js';
 
 // TYPE -------------------------------------------------------------------------------------------
 
@@ -21,16 +20,16 @@ export type IBackendDocument = {
   _id: string;
   name: string;
   metadata: {
-    name: "file";
+    name: 'file';
     filename: string;
-    "content-type": string;
-    "content-transfer-encoding": string;
-    charset: "UTF-8";
+    'content-type': string;
+    'content-transfer-encoding': string;
+    charset: 'UTF-8';
     size: number;
   };
   deleted: boolean;
   eParent: string | null;
-  eType: "file";
+  eType: 'file';
   file: string;
   shared: [];
   inheritedShares: [];
@@ -45,15 +44,15 @@ export type IBackendDocumentArray = Array<IBackendDocument>;
 
 // ADAPTER ----------------------------------------------------------------------------------------
 
-export const backendDocumentsAdapter: (data: IBackendDocumentArray) => IRootItems<IFile> = data => {
-  const result = {} as IRootItems<IFile>;
+export const backendDocumentsAdapter: (data: IBackendDocumentArray) => IItems<IFile> = data => {
+  const result = {} as IItems<IFile>;
   if (!data) {
     return result;
   }
   for (const item of data) {
     result[item._id] = {
-      contentType: item.metadata["content-type"],
-      date: moment(item.modified, "YYYY-MM-DD HH:mm.ss.SSS")
+      contentType: item.metadata['content-type'],
+      date: moment(item.modified, 'YYYY-MM-DD HH:mm.ss.SSS')
         .toDate()
         .getTime(),
       filename: item.metadata.filename,
@@ -71,7 +70,7 @@ export const backendDocumentsAdapter: (data: IBackendDocumentArray) => IRootItem
 
 // GET -----------------------------------------------------------------------------------------
 
-export function getDocuments(parameters: IFiltersParameters): Promise<IRootItems<IItem>> {
+export function getDocuments(parameters: IFiltersParameters): Promise<IItems<IItem>> {
   const { parentId } = parameters;
 
   if (parentId === FilterId.root) {
@@ -79,14 +78,13 @@ export function getDocuments(parameters: IFiltersParameters): Promise<IRootItems
   }
 
   const formatParameters = (parameters = {}) => {
-    let result = "?";
+    let result = '?';
 
     for (let key in parameters) {
       if (!(parameters as any)[key]) {
-        // skip empty parameters
         continue;
       }
-      if (key === "parentId" && (parameters as any)[key] in FilterId) {
+      if (key === 'parentId' && (parameters as any)[key] in FilterId) {
         // its a root folder, no pass parentId
         continue;
       }
@@ -102,23 +100,23 @@ export function getDocuments(parameters: IFiltersParameters): Promise<IRootItems
 
 export const uploadDocument = (dispatch: any, content: ContentUri[], onEnd: any) => {
   const signedHeaders = OAuth2RessourceOwnerPasswordClient.connection.sign({}).headers;
-  const headers = { ...signedHeaders, "content-Type": "multipart/form-data" };
+  const headers = { ...signedHeaders, 'content-Type': 'multipart/form-data' };
   const body = content.reduce(
     (acc, item, index) => [
       ...acc,
       { name: `document${index}`, type: item.mime, filename: item.name, data: RNFB.wrap(item.uri) },
     ],
-    []
+    [],
   );
 
   dispatch(progressInitAction());
   RNFB.fetch(
-    "POST",
+    'POST',
     `${
       Conf.currentPlatform.url
     }/workspace/document?quality=1&thumbnail=120x120&thumbnail=100x100&thumbnail=290x290&thumbnail=381x381&thumbnail=1600x0`,
     headers,
-    body
+    body,
   )
     .uploadProgress({ interval: 100 }, (written, total) => {
       dispatch(progressAction((written / total) * 100));
@@ -127,17 +125,17 @@ export const uploadDocument = (dispatch: any, content: ContentUri[], onEnd: any)
       dispatch(progressAction(100));
       setTimeout(() => {
         dispatch(progressEndAction());
-        if (Platform.OS === "android") {
-          ToastAndroid.show(I18n.t("workspace-uploadSuccessful"), ToastAndroid.SHORT);
+        if (Platform.OS === 'android') {
+          ToastAndroid.show(I18n.t('workspace-uploadSuccessful'), ToastAndroid.SHORT);
         }
         onEnd(response);
       }, 500);
     })
     .catch(err => {
-      if (Platform.OS === "android") {
-        ToastAndroid.show(I18n.t("workspace-uploadFailed"), ToastAndroid.SHORT);
+      if (Platform.OS === 'android') {
+        ToastAndroid.show(I18n.t('workspace-uploadFailed'), ToastAndroid.SHORT);
       }
-      console.log("upload failed", err.message);
+      console.log('upload failed', err.message);
       dispatch(progressEndAction());
     });
 };

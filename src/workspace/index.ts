@@ -1,7 +1,7 @@
-import config from "./config";
+import config from './config';
 
-import mainComp from "./navigator";
-import mainReducer from "./reducers";
+import mainComp from './navigator';
+import mainReducer from './reducers';
 
 // Main component
 export const root = mainComp;
