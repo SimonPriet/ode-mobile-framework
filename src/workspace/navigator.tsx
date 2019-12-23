@@ -3,6 +3,8 @@ import ContainerItems from './containers/Items';
 import { Details } from './containers/Details';
 import { IEvent } from '../types/ievents';
 import { Alert } from 'react-native';
+import { uploadAction } from './actions/upload';
+import pickFile from '../infra/actions/pickFile';
 
 export default createStackNavigator({
   Workspace: {
@@ -15,7 +17,7 @@ export default createStackNavigator({
           text: 'Ajouter Document',
           icon: 'file-plus',
           id: 'addDocument',
-          onSelect: (dispatch: Function, event: IEvent) => Alert.alert('Element selected' + event.id),
+          onSelect: (dispatch: Function) => pickFile().then(contentUri => dispatch(uploadAction(contentUri))),
         },
         {
           text: 'Créer dossier',
