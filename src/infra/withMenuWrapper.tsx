@@ -1,16 +1,14 @@
 import * as React from 'react';
 import { FloatingAction } from '../ui/FloatingButton';
-import { IEventProps, INavigationProps } from '../types';
 import { View } from 'react-native';
 
-export type IMenuProps = IEventProps &
-  INavigationProps & {
-    actions: any;
-    dispatch: Function;
-  };
+export type IProps = {
+  navigation: any;
+  dispatch: Function;
+};
 
 export function withMenuWrapper(WrappedComponent: React.Component): React.Component {
-  class HOC extends React.Component<IMenuProps> {
+  class HOC extends React.Component<IProps> {
     handleEvent(event: any) {
       event.onSelect(this.props.dispatch, event);
     }
