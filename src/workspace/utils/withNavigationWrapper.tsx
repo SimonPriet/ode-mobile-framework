@@ -6,7 +6,7 @@ import I18n from 'i18n-js';
 import config from '../config';
 import { ViewStyle } from 'react-native';
 
-export interface INotifyProps {
+export interface IProps {
   navigation: any;
 }
 
@@ -14,8 +14,10 @@ const HeaderBackAction = ({ navigation, style }: { navigation: NavigationScreenP
   return <HeaderAction onPress={() => navigation.pop()} name={'back'} style={style} />;
 };
 
-export default function withNavigationWrapper(WrappedComponent: React.Component): React.Component {
-  class HOC extends React.Component<INotifyProps> {
+export default function withNavigationWrapper<T extends IProps>(
+  WrappedComponent: React.ComponentType<T>,
+): React.ComponentType<T> {
+  return class extends React.Component<T> {
     static navigationOptions = ({ navigation }: { navigation: NavigationScreenProp<{}> }) => {
       return standardNavScreenOptions(
         {
@@ -48,6 +50,5 @@ export default function withNavigationWrapper(WrappedComponent: React.Component)
     render() {
       return <WrappedComponent {...this.props} />;
     }
-  }
-  return HOC;
+  };
 }

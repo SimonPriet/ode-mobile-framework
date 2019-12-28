@@ -34,7 +34,7 @@ export const Item = ({ onEvent, ...item }: IItem & IEventProps) => {
   const longOwnerName = `${I18n.t('by')}${ownerName}`;
 
   return (
-    <ListItem borderBottomWidth={0} onPress={() => onEvent({ type: EVENT_TYPE.SELECT, ...item })}>
+    <ListItem onPress={() => onEvent({ type: EVENT_TYPE.SELECT, ...item })}>
       <LeftIconPanel>{renderIcon(id, isFolder, name, contentType)}</LeftIconPanel>
       <CenterPanel style={style.centerPanel}>
         <Text numberOfLines={1} style={style.fileName}>

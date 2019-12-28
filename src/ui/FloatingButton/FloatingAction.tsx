@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Keyboard, View, FlatList } from 'react-native';
+import { FlatList, Keyboard, StyleSheet, View } from 'react-native';
 import FloatingActionItem from './FloatingActionItem';
 import { layoutSize } from '../../styles/common/layoutSize';
 import { CommonStyles } from '../../styles/common/styles';
@@ -52,7 +52,6 @@ class FloatingAction extends Component<IFloatingProps, IState> {
     if (onEvent) {
       onEvent(event);
     }
-
     this.reset();
   };
 
@@ -65,20 +64,20 @@ class FloatingAction extends Component<IFloatingProps, IState> {
   }
 
   renderActions() {
-    const { actions } = this.props;
+    const { menuItems } = this.props;
     const { active } = this.state;
 
-    if (!active || !actions || actions.length === 0) {
+    if (!active || !menuItems || menuItems.length === 0) {
       return undefined;
     }
 
     return (
       <FlatList
         contentContainerStyle={styles.actions}
-        data={actions}
+        data={menuItems}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         keyExtractor={(item: IMenuItem) => item.id}
-        renderItem={({ item }) => <FloatingActionItem {...item} onEvent={this.handleEvent.bind(this)} />}
+        renderItem={({ item }) => <FloatingActionItem item={item} onEvent={this.handleEvent.bind(this)} />}
       />
     );
   }

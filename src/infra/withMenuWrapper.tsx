@@ -1,31 +1,29 @@
 import * as React from 'react';
 import { FloatingAction } from '../ui/FloatingButton';
 import { View } from 'react-native';
+import { IMenuItem } from '../ui/FloatingButton/types';
 
 export type IProps = {
   navigation: any;
   dispatch: Function;
 };
 
-export function withMenuWrapper(WrappedComponent: React.Component): React.Component {
-  class HOC extends React.Component<IProps> {
-    handleEvent(event: any) {
-      event.onSelect(this.props.dispatch, event);
+export function withMenuWrapper<T extends IProps>(WrappedComponent: React.ComponentType<T>): React.ComponentType<T> {
+  return class extends React.Component<T> {
+    handleEvent(event: IMenuItem) {
+      event.onEvent(event);
     }
 
     render() {
       const { navigation } = this.props;
-      const actions = navigation ? navigation.getParam('actions') : null;
+      const menuItems = navigation ? navigation.getParam('menuItems') : null;
 
       return (
         <View style={{ flex: 1 }}>
-          <WrappedComponent {...this.props} />
-          <FloatingAction actions={actions} onEvent={this.handleEvent.bind(this)} />
+          <WrappedComponent {...this.props as T} />
+          <FloatingAction menuItems={menuItems} onEvent={this.handleEvent.bind(this)} />
         </View>
       );
     }
-  }
-
-  HOC.navigationOptions = WrappedComponent.navigationOptions;
-  return HOC;
+  };
 }
