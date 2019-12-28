@@ -1,17 +1,16 @@
 import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { uploadAction } from '../actions/upload';
-import { connect, ConnectedComponent } from 'react-redux';
-import { IState } from '../types/states';
-import config from '../config';
+import { connect } from 'react-redux';
+import compose from 'recompose/compose';
 
-export interface INotifyProps {
+export interface IProps {
   navigation: any;
   uploadAction: any;
 }
 
-export function _withUploadWrapper(WrappedComponent: React.Component): React.Component {
-  class HOC extends React.Component<INotifyProps> {
+function withUploadWrapper<T extends IProps>(WrappedComponent: React.ComponentType<T>): React.ComponentType<T> {
+  return class extends React.Component<T> {
     contentUri = [
       {
         uri: '',
@@ -32,23 +31,16 @@ export function _withUploadWrapper(WrappedComponent: React.Component): React.Com
     render() {
       return <WrappedComponent {...this.props} />;
     }
-  }
-
-  HOC.navigationOptions = WrappedComponent.navigationOptions;
-  return HOC;
+  };
 }
-
-const mapStateToProps = (state: any, props: any) => {
-  return {};
-};
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({ uploadAction }, dispatch);
 };
 
-export const withUploadWrapper = (WrappedComponent: React.Component): ConnectedComponent<any, any> => {
-  return connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  )(_withUploadWrapper(WrappedComponent));
+export default (wrappedComponent: React.ComponentType<any>): React.ComponentType<any> => {
+  return compose(
+    connect(mapDispatchToProps),
+    withUploadWrapper,
+  )(wrappedComponent);
 };

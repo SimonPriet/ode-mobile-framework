@@ -7,8 +7,8 @@ import { layoutSize } from '../../styles/common/layoutSize';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Text } from '../text';
 
-const Item = ({ onEvent, ...item }: IEventProps & IMenuItem) => {
-  const { icon, text, id } = item;
+const Item = ({ onEvent, item }: IEventProps & any) => {
+  const { icon, text } = item as IMenuItem;
 
   return (
     <TouchableOpacity style={style.touchPanel} onPress={() => onEvent({ type: EVENT_TYPE.SELECT, ...item })}>

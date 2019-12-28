@@ -1,12 +1,14 @@
-import { IId } from '../../../types';
+import { EVENT_TYPE, IId } from '../../../types';
 import { IEventProps } from '../../../types';
 
-export type IMenuItem = IId & {
-  icon: string;
-  onSelect: Function;
-  text: string;
-};
+export type IMenuItem = IId &
+  IEventProps & {
+    icon: string;
+    text: string;
+    type: EVENT_TYPE.MENU_SELECT;
+  };
 
-export type IFloatingProps = IEventProps & {
-  actions: IMenuItem[];
+export type IFloatingProps = {
+  menuItems: IMenuItem[];
+  onEvent: (event: IMenuItem) => void;
 };

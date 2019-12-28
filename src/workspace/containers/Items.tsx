@@ -16,7 +16,7 @@ import { PageContainer } from '../../ui/ContainerContent';
 import { Loading, ProgressBar } from '../../ui';
 import { removeAccents } from '../../utils/string';
 import withNavigationWrapper from '../utils/withNavigationWrapper';
-import { withUploadWrapper } from '../utils/withUploadWrapper';
+import withUploadWrapper from '../utils/withUploadWrapper';
 import { withMenuWrapper } from '../../infra/withMenuWrapper';
 import { IEvent } from '../../types/ievents';
 
@@ -48,7 +48,9 @@ export class Items extends React.PureComponent<IItemsProps, { isFocused: boolean
     });
   }
 
-  public onEvent({ type, ...item }: IEvent & IItem) {
+  public onEvent(event: any) {
+    const { type, ...item } = event as IEvent & IItem;
+
     switch (type) {
       case EVENT_TYPE.SELECT:
         const { id: parentId, name: title, isFolder } = item;
@@ -137,7 +139,7 @@ export default compose<IItemsProps, any>(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  withMenuWrapper,
   withNavigationWrapper,
+  withMenuWrapper,
   withUploadWrapper,
 )(Items);
