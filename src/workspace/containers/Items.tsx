@@ -120,14 +120,16 @@ export class Items extends React.PureComponent<IItemsProps, { isFocused: boolean
   }
 }
 
-const mapStateToProps = (state: any, props: any) => {
-  const stateItems: IState = config.getLocalState(state).items;
+const getProps = (stateItems: IState, props: any) => {
   const parentId = props.navigation.getParam('parentId');
   const parentIdItems = stateItems[parentId] || {};
   const isFetching = parentIdItems.isFetching || false;
-  const items = parentIdItems.data;
 
-  return { items, isFetching };
+  return { isFetching, items: parentIdItems.data };
+};
+
+const mapStateToProps = (state: any, props: any) => {
+  return getProps(config.getLocalState(state).items, props);
 };
 
 const mapDispatchToProps = (dispatch: any) => {
@@ -143,3 +145,5 @@ export default compose<IItemsProps, any>(
   withMenuWrapper,
   withUploadWrapper,
 )(Items);
+
+

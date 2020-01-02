@@ -32,7 +32,6 @@ export interface IAction<T> {
   data?: T;
 }
 
-
 export interface IState<T> {
   data: T | undefined;
   didInvalidate: boolean;
@@ -96,7 +95,7 @@ export const shouldFetch: (state: IState<any>) => boolean = state => {
 export const asyncFetchJson: <DataTypeBackend, DataType>(
   uri: string,
   adapter: (data: DataTypeBackend) => DataType,
-  opts: object
+  opts: object,
 ) => Promise<DataType> = async (uri, adapter, opts) => {
   const json = (await fetchJSONWithCache(uri, opts)) as any;
   return adapter(json);
@@ -109,7 +108,7 @@ export const asyncFetchJson: <DataTypeBackend, DataType>(
  */
 export const asyncGetJson: <DataTypeBackend, DataType>(
   uri: string,
-  adapter: (data: DataTypeBackend) => DataType
+  adapter: (data: DataTypeBackend) => DataType,
 ) => Promise<DataType> = async (uri, adapter) => {
   return asyncFetchJson(uri, adapter, { method: "get" });
 };
@@ -142,7 +141,7 @@ export const asyncFetchIfNeeded: <DataType = any, StateType extends IState<DataT
  */
 export default function asyncReducer<T>(
   dataReducer: Reducer<T, IAction<T>>,
-  actionTypes: IAsyncActionTypes
+  actionTypes: IAsyncActionTypes,
 ): Reducer<any, any> {
   return (
     state: IState<T> = {
@@ -151,7 +150,7 @@ export default function asyncReducer<T>(
       isFetching: false,
       lastUpdated: null,
     },
-    action: IAction<T>
+    action: IAction<T>,
   ) => {
     // Reducing
     const data = dataReducer(state.data, action);
