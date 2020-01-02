@@ -1,5 +1,5 @@
-import { fetchJSONWithCache } from "../fetchWithCache";
-import { Reducer } from "redux";
+import { fetchJSONWithCache } from '../fetchWithCache';
+import { Reducer } from 'redux';
 
 // OBSOLETE.
 
@@ -26,12 +26,11 @@ import { Reducer } from "redux";
 // TYPE DEFINITIONS ----------------------------------------------------------------------------------------
 
 export interface IAction<T> {
-  id?: string,
+  id?: string;
   type: string;
   receivedAt?: Date;
-  data?: T
+  data?: T;
 }
-
 
 export interface IState<T> {
   data: T | undefined;
@@ -53,28 +52,23 @@ export interface IAsyncActionTypes {
  * Generates a action type string by adding a suffix.
  * The suffix can be "_INVALIDATED", "_REQUESTED", "_RECEIVED", "_FETCH_ERROR".
  */
-const actionTypeInvalidated = (actionPrefix: string) =>
-  actionPrefix + "_INVALIDATED";
+const actionTypeInvalidated = (actionPrefix: string) => actionPrefix + '_INVALIDATED';
 
-const actionTypeRequested = (actionPrefix: string) =>
-  actionPrefix + "_REQUESTED";
+const actionTypeRequested = (actionPrefix: string) => actionPrefix + '_REQUESTED';
 
-const actionTypeReceived = (actionPrefix: string) => actionPrefix + "_RECEIVED";
+const actionTypeReceived = (actionPrefix: string) => actionPrefix + '_RECEIVED';
 
-const actionTypeFetchError = (actionPrefix: string) =>
-  actionPrefix + "_FETCH_ERROR";
+const actionTypeFetchError = (actionPrefix: string) => actionPrefix + '_FETCH_ERROR';
 
 /**
  * Generates four action types to manage async data flow.
  * @param actionPrefix base type for all generated action types.
  */
-export const asyncActionTypes: (
-  actionPrefix: string
-) => IAsyncActionTypes = actionPrefix => ({
+export const asyncActionTypes: (actionPrefix: string) => IAsyncActionTypes = actionPrefix => ({
   fetchError: actionTypeFetchError(actionPrefix),
   invalidated: actionTypeInvalidated(actionPrefix),
   received: actionTypeReceived(actionPrefix),
-  requested: actionTypeRequested(actionPrefix)
+  requested: actionTypeRequested(actionPrefix),
 });
 
 /**
@@ -82,10 +76,14 @@ export const asyncActionTypes: (
  * @param state the asyncReducer state.
  */
 export const shouldFetch: (state: IState<any>) => boolean = state => {
-  if (state === undefined) return true;
+  if (state === undefined) {
+    return true;
+  }
   if (state.isFetching) {
     return false;
-  } else return state.didInvalidate;
+  } else {
+    return state.didInvalidate;
+  }
 };
 
 /**
@@ -97,7 +95,7 @@ export const shouldFetch: (state: IState<any>) => boolean = state => {
 export const asyncFetchJson: <DataTypeBackend, DataType>(
   uri: string,
   adapter: (data: DataTypeBackend) => DataType,
-  opts: object
+  opts: object,
 ) => Promise<DataType> = async (uri, adapter, opts) => {
   const json = (await fetchJSONWithCache(uri, opts)) as any;
   return adapter(json);
@@ -110,9 +108,9 @@ export const asyncFetchJson: <DataTypeBackend, DataType>(
  */
 export const asyncGetJson: <DataTypeBackend, DataType>(
   uri: string,
-  adapter: (data: DataTypeBackend) => DataType
+  adapter: (data: DataTypeBackend) => DataType,
 ) => Promise<DataType> = async (uri, adapter) => {
-  return asyncFetchJson(uri, adapter, { method: "get" });
+  return asyncFetchJson(uri, adapter, { method: 'get' });
 };
 
 /**
@@ -121,8 +119,7 @@ export const asyncGetJson: <DataTypeBackend, DataType>(
  * @param fetchFunc function to fetch data. Must return a value that could be directely put into the reducer data.
  * @param args optional - additional arguments to be passed to the fetchFunc.
  */
-export const asyncFetchIfNeeded: <DataType = any,
-  StateType extends IState<DataType> = IState<DataType>>(
+export const asyncFetchIfNeeded: <DataType = any, StateType extends IState<DataType> = IState<DataType>>(
   localState: (globalState: any) => StateType,
   fetchFunc: (...args: any[]) => DataType,
   ...args: any[]
@@ -144,16 +141,16 @@ export const asyncFetchIfNeeded: <DataType = any,
  */
 export default function asyncReducer<T>(
   dataReducer: Reducer<T, IAction<T>>,
-  actionTypes: IAsyncActionTypes
-): Reducer< any, any> {
+  actionTypes: IAsyncActionTypes,
+): Reducer<any, any> {
   return (
     state: IState<T> = {
       data: undefined, // Set by homework.diaryList reducer.
       didInvalidate: true,
       isFetching: false,
-      lastUpdated: null
+      lastUpdated: null,
     },
-    action: IAction<T>
+    action: IAction<T>,
   ) => {
     // Reducing
     const data = dataReducer(state.data, action);
@@ -162,13 +159,13 @@ export default function asyncReducer<T>(
         return {
           ...state,
           data,
-          didInvalidate: true
+          didInvalidate: true,
         };
       case actionTypes.requested:
         return {
           ...state,
           data,
-          isFetching: true
+          isFetching: true,
         };
       case actionTypes.received:
         return {
@@ -176,14 +173,14 @@ export default function asyncReducer<T>(
           data,
           didInvalidate: false,
           isFetching: false,
-          lastUpdated: action.receivedAt || null
+          lastUpdated: action.receivedAt || null,
         };
       case actionTypes.fetchError:
         return {
           ...state,
           data,
           didInvalidate: true,
-          isFetching: false
+          isFetching: false,
         };
       default:
         return { ...state, data };

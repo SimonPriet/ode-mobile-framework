@@ -2,9 +2,8 @@
 
 import { asyncActionTypes } from '../../infra/redux/async';
 import config from '../config';
-import { backendDocumentsAdapter, uploadDocument } from './helpers/documents';
+import { uploadDocument } from './helpers/documents';
 import { ContentUri, FilterId } from '../types';
-import { addReceived } from './add';
 import { listAction } from './list';
 
 // ACTION UPLOAD ------------------------------------------------------------------------------------
