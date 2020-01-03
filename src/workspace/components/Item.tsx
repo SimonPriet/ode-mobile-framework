@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet} from 'react-native';
 import I18n from 'i18n-js';
 import { IEventProps, IItem, EVENT_TYPE } from '../types';
 
@@ -34,7 +34,9 @@ export const Item = ({ onEvent, ...item }: IItem & IEventProps) => {
   const longOwnerName = `${I18n.t('by')}${ownerName}`;
 
   return (
-    <ListItem onPress={() => onEvent({ type: EVENT_TYPE.SELECT, ...item })}>
+    <ListItem
+      onLongPress={() => onEvent({ type: EVENT_TYPE.LONG_SELECT, ...item })}
+      onPress={() => onEvent({ type: EVENT_TYPE.SELECT, ...item })}>
       <LeftIconPanel>{renderIcon(id, isFolder, name, contentType)}</LeftIconPanel>
       <CenterPanel style={style.centerPanel}>
         <Text numberOfLines={1} style={style.fileName}>

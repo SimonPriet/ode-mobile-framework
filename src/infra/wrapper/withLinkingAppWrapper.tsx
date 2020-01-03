@@ -1,10 +1,10 @@
 import * as React from 'react';
 import RNFileShareIntent from 'react-native-file-share-intent';
 import { NativeEventEmitter, NativeModules, Platform } from 'react-native';
-import { mainNavNavigate } from '../navigation/helpers/navHelper';
-import { FilterId } from '../workspace/types/filters';
+import { mainNavNavigate } from '../../navigation/helpers/navHelper';
+import { FilterId } from '../../workspace/types/filters';
 import I18n from 'i18n-js';
-import { ContentUri } from '../types/contentUri';
+import { ContentUri } from '../../types/contentUri';
 import { IProps } from './withMenuWrapper';
 
 export default function withLinkingAppWrapper<T extends IProps>(

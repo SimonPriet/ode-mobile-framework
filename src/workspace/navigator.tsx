@@ -29,7 +29,7 @@ export default connect(
         filter: 'root',
         popupItems: [
           {
-            parentId: 'owner',
+            filter: 'owner',
             items: [
               {
                 text: 'Ajouter Document',
@@ -48,9 +48,9 @@ export default connect(
             ],
           },
         ],
-        onSelectItems: [
+        toolbarItems: [
           {
-            parentId: 'owner',
+            filter: 'owner',
             items: [
               {
                 text: 'Copier',
@@ -80,7 +80,7 @@ export default connect(
             ],
           },
           {
-            parentId: 'root',
+            filter: 'root',
             items: [
               {
                 text: 'Copier',

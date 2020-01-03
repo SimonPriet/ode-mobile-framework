@@ -4,11 +4,10 @@
  */
 import { Reducer } from 'redux';
 
-import { FilterId } from '../types';
 import { SELECT_ACTION_TYPE, SelectAction } from '../actions/select';
 
 export interface ISelectState {
-  [key: string]: boolean;
+  [key: string]: boolean | null;
 }
 
 const stateDefault: ISelectState = {};
@@ -21,7 +20,7 @@ const selectReducer: Reducer<ISelectState, SelectAction> = (
     case SELECT_ACTION_TYPE:
       return {
         ...state,
-        [action.id || FilterId.root]: action.value,
+        [action.id]: state[action.id] ? null : true,
       };
     default:
       return state;

@@ -1,5 +1,5 @@
-import { EVENT_TYPE, IId } from '../../../types';
-import { IEventProps } from '../../../types';
+import { EVENT_TYPE, IId } from '../../types';
+import { IEventProps } from '../../types';
 
 export type IMenuItem = IId &
   IEventProps & {
