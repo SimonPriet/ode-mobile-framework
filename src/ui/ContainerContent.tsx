@@ -1,6 +1,7 @@
 import style from 'glamorous-native';
 import { CommonStyles } from '../styles/common/styles';
-import TouchableOpacity from '../ui/CustomTouchableOpacity';
+// import TouchableOpacity from '../ui/CustomTouchableOpacity'; don't works with onLongPress
+import { TouchableOpacity } from 'react-native';
 import { Weight } from './Typography';
 import { layoutSize } from '../styles/common/layoutSize';
 

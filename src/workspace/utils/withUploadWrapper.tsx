@@ -2,7 +2,6 @@ import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { uploadAction } from '../actions/upload';
 import { connect } from 'react-redux';
-import compose from 'recompose/compose';
 
 export interface IProps {
   navigation: any;
@@ -38,9 +37,5 @@ const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({ uploadAction }, dispatch);
 };
 
-export default (wrappedComponent: React.ComponentType<any>): React.ComponentType<any> => {
-  return compose(
-    connect(mapDispatchToProps),
-    withUploadWrapper,
-  )(wrappedComponent);
-};
+export default (wrappedComponent: React.ComponentType<any>): React.ComponentType<any> =>
+  connect(mapDispatchToProps)(withUploadWrapper(wrappedComponent));
