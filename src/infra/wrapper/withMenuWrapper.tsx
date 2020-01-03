@@ -28,7 +28,7 @@ function withMenuWrapper<T extends IProps>(WrappedComponent: React.ComponentType
     getToolbarItems(): IMenuItem[] {
       const { select } = this.props;
 
-      if (select && select.length > 0) {
+      if (select && Object.keys(select).length > 0) {
         const { navigation } = this.props;
         const toolbarItems = navigation ? navigation.getParam('toolbarItems') : null;
         const filter = navigation ? navigation.getParam('filter') : 'root';
@@ -52,7 +52,7 @@ function withMenuWrapper<T extends IProps>(WrappedComponent: React.ComponentType
 }
 
 const mapStateToProps = (state: any) => {
-  return { select: state.select };
+  return { select: state.workspace.select }; // dependency with workspace, not good
 };
 
 export default (wrappedComponent: React.ComponentType<any>): React.ComponentType<any> =>
