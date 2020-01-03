@@ -1,53 +1,47 @@
-import * as React from "react";
-import { Icon } from "..";
-import { EVENT_TYPE } from "../../types";
-import { layoutSize } from "../../styles/common/layoutSize";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { Text } from "../text";
+import * as React from 'react';
+import { CenterPanel } from '../ContainerContent';
+import { Icon } from '..';
+import { IEventProps, EVENT_TYPE } from '../../types';
+import { IMenuItem } from '../types';
+import { layoutSize } from '../../styles/common/layoutSize';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
-const Item = ({ onEvent, item, nbSelected }: any) => {
-  const { icon, id } = item;
-
-  if (id === "nbSelected") {
-    return (
-      <View style={styles.nbSelected}>
-        <Text numberOfLines={1} style={styles.text}>
-          {nbSelected}
-        </Text>
-      </View>
-    );
-  }
+const Item = ({ onEvent, item }: IEventProps & any) => {
+  const { icon } = item as IMenuItem;
 
   return (
     <TouchableOpacity
-      style={styles.touchPanel}
-      onPress={() => onEvent({ type: EVENT_TYPE.MENU_SELECT, id: item.id, item })}
-    >
-      <Icon color="#ffffff" size={layoutSize.LAYOUT_24} name={icon} />
+      style={style.touchPanel}
+      onPress={() => onEvent({ type: EVENT_TYPE.SELECT, ...item })}>
+      <CenterPanel style={style.centerPanel}>
+        <Icon color="#ffffff" size={layoutSize.LAYOUT_28} name={icon} />
+      </CenterPanel>
     </TouchableOpacity>
   );
 };
 
 export default Item;
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
+  centerPanel: {
+    alignItems: 'center',
+    backgroundColor: '#ff8000',
+    flexDirection: 'row',
+    flexGrow: 3,
+    justifyContent: 'flex-start',
+    margin: 2,
+    marginLeft: -20,
+  },
+  fileName: {
+    color: '#ffffff',
+    fontSize: layoutSize.LAYOUT_14,
+  },
   touchPanel: {
-    backgroundColor: "#ff8000",
-    justifyContent: "center",
-    alignItems: "center",
-    width: layoutSize.LAYOUT_58,
-    height: layoutSize.LAYOUT_58,
-  },
-  nbSelected: {
-    backgroundColor: "#ff8000",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    width: layoutSize.LAYOUT_30,
-    height: layoutSize.LAYOUT_58,
-  },
-  text: {
-    color: "#ffffff",
-    fontSize: layoutSize.LAYOUT_20,
-    fontWeight: "bold",
+    backgroundColor: '#ff8000',
+    flexDirection: 'row',
+    flex: 1,
+    paddingLeft: 5,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
 });

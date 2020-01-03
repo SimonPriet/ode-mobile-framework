@@ -2,7 +2,7 @@ import * as React from 'react';
 import { CenterPanel, LeftIconPanel } from '../ContainerContent';
 import { Icon } from '..';
 import { IEventProps, EVENT_TYPE } from '../../types';
-import { IMenuItem } from './types';
+import { IMenuItem } from '../types';
 import { layoutSize } from '../../styles/common/layoutSize';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Text } from '../text';

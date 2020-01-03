@@ -17,8 +17,9 @@ import { Loading, ProgressBar } from '../../ui';
 import { removeAccents } from '../../utils/string';
 import withNavigationWrapper from '../utils/withNavigationWrapper';
 import withUploadWrapper from '../utils/withUploadWrapper';
-import { withMenuWrapper } from '../../infra/withMenuWrapper';
+import withMenuWrapper from '../../infra/wrapper/withMenuWrapper';
 import { IEvent } from '../../types/ievents';
+import { selectAction } from '../actions/select';
 
 const styles = StyleSheet.create({
   separator: {
@@ -62,8 +63,11 @@ export class Items extends React.PureComponent<IItemsProps, { isFocused: boolean
           : this.props.navigation.push('WorkspaceDetails', { item, title });
         return;
 
-      case EVENT_TYPE.MENU_SELECT:
-        Alert.alert(item.id);
+      case EVENT_TYPE.LONG_SELECT:
+        const { id } = item;
+        const { selectAction } = this.props;
+
+        selectAction(id);
         return;
     }
   }
@@ -133,7 +137,7 @@ const mapStateToProps = (state: any, props: any) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => {
-  return bindActionCreators({ listAction }, dispatch);
+  return bindActionCreators({ listAction, selectAction }, dispatch);
 };
 
 export default compose<IItemsProps, any>(
@@ -145,5 +149,3 @@ export default compose<IItemsProps, any>(
   withMenuWrapper,
   withUploadWrapper,
 )(Items);
-
-

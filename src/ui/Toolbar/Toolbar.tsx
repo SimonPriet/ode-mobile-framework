@@ -1,15 +1,11 @@
-import React, { Component } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
-import { Header } from "react-navigation-stack";
-import ToolbarActionItem from "./ToolbarActionItem";
-import { DEVICE_WIDTH, layoutSize } from "../../styles/common/layoutSize";
-import { IFloatingProps, IMenuItem } from "../types";
+import React, { Component } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
+import ToolbarActionItem from './ToolbarActionItem';
+import { layoutSize } from '../../styles/common/layoutSize';
+import { CommonStyles } from '../../styles/common/styles';
+import { IFloatingProps, IMenuItem } from '../types';
 
-export type INbSelected = {
-  nbSelected: number;
-};
-
-class Toolbar extends Component<IFloatingProps & INbSelected, IState> {
+class Toolbar extends Component<IFloatingProps, IState> {
   state = {
     active: false,
   };
@@ -19,7 +15,7 @@ class Toolbar extends Component<IFloatingProps & INbSelected, IState> {
   getShadow = () => {
     return {
       elevation: 10,
-      shadowColor: "#000",
+      shadowColor: '#000',
       shadowOffset: {
         width: 5,
         height: 8,
@@ -29,67 +25,35 @@ class Toolbar extends Component<IFloatingProps & INbSelected, IState> {
     };
   };
 
-  renderActions(menuItems: IMenuItem[]) {
+  handleEvent = (event: any): void => {
     const { onEvent } = this.props;
-    let foundSeparator = false;
-    const firstItems = menuItems.filter(item => {
-      if (!foundSeparator && item.id !== "separator") {
-        return true;
-      }
-      foundSeparator = true;
-      return false;
-    });
-    foundSeparator = false;
-    const lastItems = menuItems.filter(item => {
-      if (item.id === "separator") {
-        foundSeparator = true;
-        return false;
-      }
-      return foundSeparator;
-    });
+
+    if (onEvent) {
+      onEvent(event);
+    }
+  };
+
+  renderActions() {
+    const { menuItems } = this.props;
+
+    if (!menuItems || menuItems.length === 0) {
+      return undefined;
+    }
 
     return (
-      <View style={styles.overlay}>
-        <FlatList
-          contentContainerStyle={styles.firstActions}
-          data={firstItems}
-          horizontal={true}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
-          keyExtractor={(item: IMenuItem) => item.id}
-          renderItem={({ item }) => (
-            <ToolbarActionItem
-              item={item}
-              nbSelected={this.props.nbSelected}
-              onEvent={onEvent ? onEvent : () => null}
-            />
-          )}
-        />
-        <FlatList
-          contentContainerStyle={styles.lastActions}
-          data={lastItems}
-          horizontal={true}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
-          keyExtractor={(item: IMenuItem) => item.id}
-          renderItem={({ item }) => (
-            <ToolbarActionItem
-              item={item}
-              nbSelected={this.props.nbSelected}
-              onEvent={onEvent ? onEvent : () => null}
-            />
-          )}
-        />
-      </View>
+      <FlatList
+        contentContainerStyle={styles.actions}
+        data={menuItems}
+        horizontal={true}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+        keyExtractor={(item: IMenuItem) => item.id}
+        renderItem={({ item }) => <ToolbarActionItem item={item} onEvent={this.handleEvent.bind(this)} />}
+      />
     );
   }
 
   render() {
-    const { menuItems, nbSelected } = this.props;
-
-    if (!menuItems || menuItems.length === 0 || !nbSelected) {
-      return null;
-    }
-
-    return this.renderActions(menuItems);
+    return <View style={styles.overlay}>{this.renderActions()}</View>;
   }
 }
 
@@ -98,35 +62,28 @@ interface IState {
 }
 
 const styles = StyleSheet.create({
-  firstActions: {
-    backgroundColor: "#ff8000",
-    justifyContent: "flex-start",
-    width: layoutSize.LAYOUT_70,
-    height: Header.HEIGHT,
-  },
-  lastActions: {
-    backgroundColor: "#ff8000",
-    justifyContent: "flex-end",
-    width: DEVICE_WIDTH() - layoutSize.LAYOUT_70,
-    height: Header.HEIGHT,
+  actions: {
+    elevation: 10,
+    borderRadius: layoutSize.LAYOUT_6,
+    overflow: 'hidden',
+    backgroundColor: '#ffffff',
+    position: 'absolute',
+    right: layoutSize.LAYOUT_10,
+    top: layoutSize.LAYOUT_36,
+    width: layoutSize.LAYOUT_200,
+    zIndex: 10,
   },
   overlay: {
-    elevation: 15,
-    left: 0,
-    position: "absolute",
-    flex: 1,
-    flexDirection: "row",
-    top: -Header.HEIGHT,
-    width: DEVICE_WIDTH(),
-    height: Header.HEIGHT,
-    zIndex: 15,
+    height: layoutSize.LAYOUT_50,
+    position: 'absolute',
+    right: 0,
+    top: 0,
   },
-  separatorPanel: {
-    backgroundColor: "#ff8000",
-    width: 0,
-    height: Header.HEIGHT,
+  separator: {
+    borderBottomColor: CommonStyles.borderColorVeryLighter,
+    borderBottomWidth: 1,
+    width: '100%',
   },
-  separator: {},
 });
 
 export default Toolbar;

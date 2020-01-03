@@ -6,6 +6,7 @@ export enum EVENT_TYPE {
   PREVIEW,
   SELECT,
   SHARE,
+  LONG_SELECT,
 }
 
 export type IEvent = IId & {

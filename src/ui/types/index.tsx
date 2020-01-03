@@ -1,6 +1,5 @@
-import { EVENT_TYPE, IId } from "../../types";
-import { IEventProps } from "../../types";
-import { IEvent } from "../../types/ievents";
+import { EVENT_TYPE, IId } from '../../types';
+import { IEventProps } from '../../types';
 
 export type IMenuItem = IId &
   IEventProps & {
@@ -11,5 +10,5 @@ export type IMenuItem = IId &
 
 export type IFloatingProps = {
   menuItems: IMenuItem[];
-  onEvent: (event: IEvent) => void;
+  onEvent: (event: IMenuItem) => void;
 };

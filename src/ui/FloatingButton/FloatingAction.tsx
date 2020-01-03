@@ -3,7 +3,7 @@ import { FlatList, Keyboard, StyleSheet, View } from 'react-native';
 import FloatingActionItem from './FloatingActionItem';
 import { layoutSize } from '../../styles/common/layoutSize';
 import { CommonStyles } from '../../styles/common/styles';
-import { IFloatingProps, IMenuItem } from './types';
+import { IFloatingProps, IMenuItem } from '../types';
 import { ButtonIconText } from '..';
 
 class FloatingAction extends Component<IFloatingProps, IState> {
@@ -56,7 +56,12 @@ class FloatingAction extends Component<IFloatingProps, IState> {
   };
 
   renderMainButton() {
+    const { menuItems } = this.props;
     const iconName = this.state.active ? 'close' : 'add';
+
+    if (!menuItems || menuItems.length === 0) {
+      return null;
+    }
 
     return (
       <ButtonIconText style={styles.button} name={iconName} onPress={this.animateButton} size={layoutSize.LAYOUT_20} />
