@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
+import { Header } from 'react-navigation';
 import ToolbarActionItem from './ToolbarActionItem';
-import { layoutSize } from '../../styles/common/layoutSize';
-import { CommonStyles } from '../../styles/common/styles';
+import { DEVICE_WIDTH } from '../../styles/common/layoutSize';
 import { IFloatingProps, IMenuItem } from '../types';
 
-class Toolbar extends Component<IFloatingProps, IState> {
+export type INbSelected = {
+  nbSelected: number;
+};
+
+class Toolbar extends Component<IFloatingProps & INbSelected, IState> {
   state = {
     active: false,
   };
@@ -25,20 +29,8 @@ class Toolbar extends Component<IFloatingProps, IState> {
     };
   };
 
-  handleEvent = (event: any): void => {
+  renderActions(menuItems: IMenuItem[]) {
     const { onEvent } = this.props;
-
-    if (onEvent) {
-      onEvent(event);
-    }
-  };
-
-  renderActions() {
-    const { menuItems } = this.props;
-
-    if (!menuItems || menuItems.length === 0) {
-      return undefined;
-    }
 
     return (
       <FlatList
@@ -47,13 +39,21 @@ class Toolbar extends Component<IFloatingProps, IState> {
         horizontal={true}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         keyExtractor={(item: IMenuItem) => item.id}
-        renderItem={({ item }) => <ToolbarActionItem item={item} onEvent={this.handleEvent.bind(this)} />}
+        renderItem={({ item }) => (
+          <ToolbarActionItem {...item} nbSelected={this.props.nbSelected} onEvent={onEvent ? onEvent : () => null} />
+        )}
       />
     );
   }
 
   render() {
-    return <View style={styles.overlay}>{this.renderActions()}</View>;
+    const { menuItems, nbSelected } = this.props;
+
+    if (!menuItems || menuItems.length === 0 || !nbSelected) {
+      return null;
+    }
+
+    return <View style={styles.overlay}>{this.renderActions(menuItems)}</View>;
   }
 }
 
@@ -63,27 +63,26 @@ interface IState {
 
 const styles = StyleSheet.create({
   actions: {
-    elevation: 10,
-    borderRadius: layoutSize.LAYOUT_6,
-    overflow: 'hidden',
-    backgroundColor: '#ffffff',
+    elevation: 20,
+    overflow: 'visible',
+    backgroundColor: '#ff8000',
     position: 'absolute',
-    right: layoutSize.LAYOUT_10,
-    top: layoutSize.LAYOUT_36,
-    width: layoutSize.LAYOUT_200,
-    zIndex: 10,
+    top: 0,
+    left: 0,
+    width: DEVICE_WIDTH(),
+    height: Header.HEIGHT,
+    zIndex: 20,
   },
   overlay: {
-    height: layoutSize.LAYOUT_50,
+    elevation: 15,
+    left: 0,
     position: 'absolute',
-    right: 0,
-    top: 0,
+    top: -Header.HEIGHT,
+    width: DEVICE_WIDTH(),
+    height: Header.HEIGHT,
+    zIndex: 15,
   },
-  separator: {
-    borderBottomColor: CommonStyles.borderColorVeryLighter,
-    borderBottomWidth: 1,
-    width: '100%',
-  },
+  separator: {},
 });
 
 export default Toolbar;

@@ -16,3 +16,7 @@ export type IEvent = IId & {
 export interface IEventProps {
   onEvent: (event: IEvent) => void;
 }
+
+export interface ISelectedProps {
+  selected: boolean;
+}

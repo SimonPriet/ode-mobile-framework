@@ -30,7 +30,7 @@ export function listError(errmsg: string, id: string | undefined) {
  * Dispatches WORKSPACE_LIST_REQUESTED, WORKSPACE_LIST_RECEIVED, and WORKSPACE_LIST_FETCH_ERROR if an error occurs.
  */
 export function listAction(parameters: IFiltersParameters) {
-  return async (dispatch: any, state: any) => {
+  return async (dispatch: any) => {
     dispatch(listRequested(parameters.parentId));
 
     try {

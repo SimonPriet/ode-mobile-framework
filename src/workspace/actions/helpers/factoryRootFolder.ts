@@ -10,5 +10,6 @@ export const factoryRootFolder = (filterId: FilterId): IFolder => {
     number: 1,
     owner: '',
     ownerName: '',
+    contentType: 'text',
   };
 };

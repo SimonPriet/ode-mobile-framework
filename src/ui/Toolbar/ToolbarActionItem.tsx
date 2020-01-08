@@ -1,21 +1,32 @@
 import * as React from 'react';
-import { CenterPanel } from '../ContainerContent';
 import { Icon } from '..';
-import { IEventProps, EVENT_TYPE } from '../../types';
+import { EVENT_TYPE } from '../../types';
 import { IMenuItem } from '../types';
 import { layoutSize } from '../../styles/common/layoutSize';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { INbSelected } from './Toolbar';
+import { Text } from '../text';
 
-const Item = ({ onEvent, item }: IEventProps & any) => {
-  const { icon } = item as IMenuItem;
+const Item = ({ onEvent, ...item }: IMenuItem & INbSelected) => {
+  const { icon, nbSelected, id } = item;
+
+  if (id === 'separator') {
+    return <View style={style.touchPanel} />;
+  }
+
+  if (id === 'nbSelected') {
+    return (
+      <View style={style.touchPanel}>
+        <Text numberOfLines={1} style={style.text}>
+          {nbSelected}
+        </Text>
+      </View>
+    );
+  }
 
   return (
-    <TouchableOpacity
-      style={style.touchPanel}
-      onPress={() => onEvent({ type: EVENT_TYPE.SELECT, ...item })}>
-      <CenterPanel style={style.centerPanel}>
-        <Icon color="#ffffff" size={layoutSize.LAYOUT_28} name={icon} />
-      </CenterPanel>
+    <TouchableOpacity style={style.touchPanel} onPress={() => onEvent({ type: EVENT_TYPE.SELECT, ...item })}>
+      <Icon color="#ffffff" size={layoutSize.LAYOUT_24} name={icon} />
     </TouchableOpacity>
   );
 };
@@ -23,25 +34,17 @@ const Item = ({ onEvent, item }: IEventProps & any) => {
 export default Item;
 
 const style = StyleSheet.create({
-  centerPanel: {
-    alignItems: 'center',
-    backgroundColor: '#ff8000',
-    flexDirection: 'row',
-    flexGrow: 3,
-    justifyContent: 'flex-start',
-    margin: 2,
-    marginLeft: -20,
-  },
-  fileName: {
-    color: '#ffffff',
-    fontSize: layoutSize.LAYOUT_14,
-  },
   touchPanel: {
     backgroundColor: '#ff8000',
     flexDirection: 'row',
-    flex: 1,
-    paddingLeft: 5,
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
+    width: layoutSize.LAYOUT_58,
+    height: layoutSize.LAYOUT_58,
+  },
+  text: {
+    color: '#ffffff',
+    fontSize: layoutSize.LAYOUT_18,
+    fontWeight: 'bold',
   },
 });
