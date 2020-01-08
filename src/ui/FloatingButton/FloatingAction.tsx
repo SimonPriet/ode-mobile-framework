@@ -5,8 +5,9 @@ import { layoutSize } from '../../styles/common/layoutSize';
 import { CommonStyles } from '../../styles/common/styles';
 import { IFloatingProps, IMenuItem } from '../types';
 import { ButtonIconText } from '..';
+import { INbSelected } from '../Toolbar/Toolbar';
 
-class FloatingAction extends Component<IFloatingProps, IState> {
+class FloatingAction extends Component<IFloatingProps & INbSelected, IState> {
   state = {
     active: false,
   };
@@ -88,6 +89,12 @@ class FloatingAction extends Component<IFloatingProps, IState> {
   }
 
   render() {
+    const { nbSelected } = this.props;
+
+    if (nbSelected) {
+      return null;
+    }
+
     return (
       <View style={styles.overlay}>
         {this.renderMainButton()}

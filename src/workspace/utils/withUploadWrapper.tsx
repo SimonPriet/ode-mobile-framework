@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { bindActionCreators } from 'redux';
 import { uploadAction } from '../actions/upload';
 import { connect } from 'react-redux';
 
@@ -17,13 +16,13 @@ function withUploadWrapper<T extends IProps>(WrappedComponent: React.ComponentTy
     ];
 
     componentDidUpdate(): void {
-      const { navigation, uploadAction } = this.props;
+      const { navigation } = this.props;
       const contentUri: any = navigation.getParam('contentUri');
 
       if (contentUri && contentUri[0].uri !== this.contentUri[0].uri) {
         this.contentUri = contentUri;
         navigation.setParams({ contentUri: undefined });
-        uploadAction(contentUri);
+        this.props.uploadAction(contentUri);
       }
     }
 
@@ -33,9 +32,8 @@ function withUploadWrapper<T extends IProps>(WrappedComponent: React.ComponentTy
   };
 }
 
-const mapDispatchToProps = (dispatch: any) => {
-  return bindActionCreators({ uploadAction }, dispatch);
-};
-
 export default (wrappedComponent: React.ComponentType<any>): React.ComponentType<any> =>
-  connect(mapDispatchToProps)(withUploadWrapper(wrappedComponent));
+  connect(
+    null,
+    { uploadAction },
+  )(withUploadWrapper(wrappedComponent));

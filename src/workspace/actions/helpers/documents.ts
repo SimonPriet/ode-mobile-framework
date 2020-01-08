@@ -6,13 +6,14 @@
 import RNFB from 'rn-fetch-blob';
 import moment from 'moment';
 import { asyncGetJson } from '../../../infra/redux/async';
-import { IItems, IFiltersParameters, IFile, FilterId, IItem, ContentUri } from '../../types';
+import { IFiltersParameters, IFile, FilterId, IItem, ContentUri } from '../../types';
 import { filters } from '../../types/filters/helpers/filters';
 import Conf from '../../../../ode-framework-conf';
 import { OAuth2RessourceOwnerPasswordClient } from '../../../infra/oauth';
 import { progressAction, progressEndAction, progressInitAction } from '../../../infra/actions/progress';
 import { Platform, ToastAndroid } from 'react-native';
 import I18n from 'i18n-js';
+import { IRootItems } from '../../types/states/items';
 
 // TYPE -------------------------------------------------------------------------------------------
 
@@ -44,8 +45,8 @@ export type IBackendDocumentArray = Array<IBackendDocument>;
 
 // ADAPTER ----------------------------------------------------------------------------------------
 
-export const backendDocumentsAdapter: (data: IBackendDocumentArray) => IItems<IFile> = data => {
-  const result = {} as IItems<IFile>;
+export const backendDocumentsAdapter: (data: IBackendDocumentArray) => IRootItems<IFile> = data => {
+  const result = {} as IRootItems<IFile>;
   if (!data) {
     return result;
   }
@@ -70,7 +71,7 @@ export const backendDocumentsAdapter: (data: IBackendDocumentArray) => IItems<IF
 
 // GET -----------------------------------------------------------------------------------------
 
-export function getDocuments(parameters: IFiltersParameters): Promise<IItems<IItem>> {
+export function getDocuments(parameters: IFiltersParameters): Promise<IRootItems<IItem>> {
   const { parentId } = parameters;
 
   if (parentId === FilterId.root) {
@@ -82,6 +83,7 @@ export function getDocuments(parameters: IFiltersParameters): Promise<IItems<IIt
 
     for (let key in parameters) {
       if (!(parameters as any)[key]) {
+        // skip empty parameters
         continue;
       }
       if (key === 'parentId' && (parameters as any)[key] in FilterId) {

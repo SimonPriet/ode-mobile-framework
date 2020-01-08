@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import items from './items';
-import select from './select';
+import selected from './select';
 
 const rootReducer = combineReducers<any>({
   items,
-  select,
+  selected,
 });
 
 export default rootReducer;

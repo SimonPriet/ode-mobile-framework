@@ -27,14 +27,14 @@ export function uploadError(errmsg: string) {
  * Dispatches WORKSPACE_UPLOAD_REQUESTED, WORKSPACE_UPLOAD_RECEIVED, and WORKSPACE_UPLOAD_FETCH_ERROR if an error occurs.
  */
 export function uploadAction(uriContent: ContentUri[] | ContentUri) {
-  return async (dispatch: any, state: any) => {
+  return async (dispatch: any) => {
     try {
       const content = Array.isArray(uriContent) ? uriContent : [uriContent];
       dispatch(uploadRequested());
       uploadDocument(dispatch, content, (response: any) => {
         if (response.data) {
-          const data = JSON.parse(response.data);
-          const dataArray = Array.isArray(data) ? data : [data];
+          // const data = JSON.parse(response.data);
+          // const dataArray = Array.isArray(data) ? data : [data];
           dispatch(
             listAction({
               // better to do addReceived, but sometime data is erased by a previous long listAction
