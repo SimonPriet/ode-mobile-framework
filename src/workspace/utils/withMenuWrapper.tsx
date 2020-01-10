@@ -6,7 +6,8 @@
  */
 import * as React from "react";
 import { View } from "react-native";
-import { EVENT_TYPE, IEvent } from "../../types/ievents";
+import { EVENT_TYPE, IEvent, IEventProps } from "../../types/ievents";
+import { IItem } from "../types/states";
 import { FilterId } from "../types/filters";
 import { selectAction } from "../actions/select";
 import { connect } from "react-redux";
@@ -17,7 +18,7 @@ import { ISelectState } from "../reducers/select";
 
 export interface IProps {
   navigation: any;
-  selected: ISelectState<any>;
+  selected: ISelectState;
   selectAction: Function;
 }
 
@@ -34,34 +35,32 @@ function withMenuWrapper<T extends IProps>(WrappedComponent: React.ComponentType
       );
     }
 
-    public handleEvent({ type, item }: IEvent) {
-      const { navigation, selectAction, selected } = this.props;
-
+    public handleEvent({ type, onEvent, ...item }: IEvent & IEventProps & IItem) {
       switch (type) {
         case EVENT_TYPE.SELECT:
-          if (Object.keys(selected).length) {
-            selectAction(item);
-          } else {
-            const { id: parentId, name: title, isFolder } = item;
-            const filterId = this.props.navigation.getParam("filter");
-            const filter = filterId === FilterId.root ? parentId : filterId;
+          const { id: parentId, name: title, isFolder } = item;
+          const filterId = this.props.navigation.getParam("filter");
+          const filter = filterId === FilterId.root ? parentId : filterId;
 
-            isFolder
-              ? navigation.push("Workspace", { filter, parentId, title })
-              : navigation.push("WorkspaceDetails", { item, title });
-          }
+          this.props.selectAction(null); // deselect items
+
+          isFolder
+            ? this.props.navigation.push("Workspace", { filter, parentId, title })
+            : this.props.navigation.push("WorkspaceDetails", { item, title });
           return;
 
         case EVENT_TYPE.LONG_SELECT:
-          selectAction(item);
+          this.props.selectAction(item);
           return;
 
         case EVENT_TYPE.MENU_SELECT:
+          const { navigation, selected } = this.props;
+
           if (item.id === "back") {
-            selectAction(null);
+            this.props.selectAction(null);
           } // deselect items
 
-          item.onEvent({ ...item, navigation, selected });
+          onEvent({ ...item, navigation, selected });
           return;
       }
     }
@@ -84,7 +83,7 @@ function withMenuWrapper<T extends IProps>(WrappedComponent: React.ComponentType
 }
 
 const mapStateToProps = (state: any) => {
-  return { selected: state.workspace.selected };
+  return { selected: state.workspace.selected }; // dependency with workspace, not good
 };
 
 export default (wrappedComponent: React.ComponentType<any>): React.ComponentType<any> =>

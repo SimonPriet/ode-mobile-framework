@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { FlatList, Keyboard, StyleSheet, View } from 'react-native';
-import FloatingActionItem from './FloatingActionItem';
-import { layoutSize } from '../../styles/common/layoutSize';
-import { CommonStyles } from '../../styles/common/styles';
-import { IFloatingProps, IMenuItem } from '../types';
-import { ButtonIconText } from '..';
-import { INbSelected } from '../Toolbar/Toolbar';
+import React, { Component } from "react";
+import { FlatList, Keyboard, StyleSheet, View } from "react-native";
+import FloatingActionItem from "./FloatingActionItem";
+import { layoutSize } from "../../styles/common/layoutSize";
+import { CommonStyles } from "../../styles/common/styles";
+import { IFloatingProps, IMenuItem } from "../types";
+import { ButtonIconText } from "..";
+import { INbSelected } from "../Toolbar/Toolbar";
 
 class FloatingAction extends Component<IFloatingProps & INbSelected, IState> {
   state = {
@@ -17,7 +17,7 @@ class FloatingAction extends Component<IFloatingProps & INbSelected, IState> {
   getShadow = () => {
     return {
       elevation: 10,
-      shadowColor: '#000',
+      shadowColor: "#000",
       shadowOffset: {
         width: 5,
         height: 8,
@@ -58,7 +58,7 @@ class FloatingAction extends Component<IFloatingProps & INbSelected, IState> {
 
   renderMainButton() {
     const { menuItems } = this.props;
-    const iconName = this.state.active ? 'close' : 'add';
+    const iconName = this.state.active ? "close" : "add";
 
     if (!menuItems || menuItems.length === 0) {
       return null;
@@ -112,9 +112,9 @@ const styles = StyleSheet.create({
   actions: {
     elevation: 10,
     borderRadius: layoutSize.LAYOUT_6,
-    overflow: 'hidden',
-    backgroundColor: '#ffffff',
-    position: 'absolute',
+    overflow: "visible",
+    backgroundColor: "#ffffff",
+    position: "absolute",
     right: layoutSize.LAYOUT_10,
     top: layoutSize.LAYOUT_36,
     width: layoutSize.LAYOUT_200,
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   },
   button: {
     elevation: 10,
-    position: 'absolute',
+    position: "absolute",
     right: layoutSize.LAYOUT_10,
     top: -layoutSize.LAYOUT_26,
     zIndex: 10,
@@ -130,14 +130,14 @@ const styles = StyleSheet.create({
   overlay: {
     bottom: 0,
     left: 0,
-    position: 'absolute',
+    position: "absolute",
     right: 0,
     top: 0,
   },
   separator: {
     borderBottomColor: CommonStyles.borderColorVeryLighter,
     borderBottomWidth: 1,
-    width: '100%',
+    width: "100%",
   },
 });
 

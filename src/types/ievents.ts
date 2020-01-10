@@ -1,4 +1,5 @@
-import { IId } from './iid';
+import { IId } from "./iid";
+import { ISelectState } from "../workspace/reducers/select";
 
 export enum EVENT_TYPE {
   DOWNLOAD,
@@ -14,9 +15,9 @@ export type IEvent = IId & {
 };
 
 export interface IEventProps {
-  onEvent: (event: IEvent) => void;
+  onEvent: (event: IEvent & any) => void;
 }
 
 export interface ISelectedProps {
-  selected: boolean;
+  selected: ISelectState;
 }

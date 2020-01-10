@@ -1,12 +1,18 @@
-import { createStackNavigator } from 'react-navigation';
-import ContainerItems from './containers/Items';
-import { Details } from './containers/Details';
-import { IEvent } from '../types/ievents';
-import { Alert } from 'react-native';
-import { uploadAction } from './actions/upload';
-import pickFile from '../infra/actions/pickFile';
-import { connect } from 'react-redux';
-import { ClipboardWorkspace } from './utils/copyPast';
+import { createStackNavigator } from "react-navigation-stack";
+import ContainerItems from "./containers/Items";
+import { Details } from "./containers/Details";
+import { ISelectedProps } from "../types/ievents";
+import { Alert } from "react-native";
+import { uploadAction } from "./actions/upload";
+import pickFile from "../infra/actions/pickFile";
+import { connect } from "react-redux";
+import { NavigationScreenProp } from "react-navigation";
+import I18n from "i18n-js";
+import config from "./config";
+import { HeaderAction, HeaderIcon } from "../ui/headers/NewHeader";
+import * as React from "react";
+import { standardNavScreenOptions } from "../navigation/helpers/navScreenOptions";
+import { INavigationProps } from "../types";
 
 const mapStateToProps = (state: any) => {
   return { selected: state.selected };
@@ -14,7 +20,7 @@ const mapStateToProps = (state: any) => {
 
 export default connect(
   mapStateToProps,
-  { uploadAction },
+  { uploadAction }
 )(
   createStackNavigator(
     {
@@ -23,100 +29,113 @@ export default connect(
         params: {
           popupItems: [
             {
-              filter: 'owner',
+              filter: "owner",
               items: [
                 {
-                  text: 'Ajouter Document',
-                  icon: 'file-plus',
-                  id: 'addDocument',
+                  text: "Ajouter Document",
+                  icon: "file-plus",
+                  id: "addDocument",
                   onEvent: () => {
                     pickFile().then(contentUri => uploadAction(contentUri));
                   },
                 },
                 {
-                  text: 'Créer dossier',
-                  icon: 'added_files',
-                  id: 'AddFolder',
-                  onEvent: (type: string, event: IEvent) => Alert.alert('Element selected' + event.id),
+                  text: "Créer dossier",
+                  icon: "added_files",
+                  id: "AddFolder",
+                  onEvent: () => Alert.alert("Creer dossier"),
                 },
               ],
             },
           ],
           toolbarItems: [
             {
-              filter: 'root',
+              filter: "root",
               items: [
                 {
-                  text: 'Back',
-                  icon: 'chevron-left1',
-                  id: 'back',
-                  onEvent: () => null, //navigation.pop(),
+                  text: "Back",
+                  icon: "chevron-left1",
+                  id: "back",
+                  onEvent: () => null,
                 },
                 {
-                  id: 'nbSelected',
+                  id: "nbSelected",
                 },
                 {
-                  id: 'separator',
+                  id: "separator",
                 },
                 {
-                  text: 'Copier',
-                  icon: 'content-copy',
-                  id: 'copy',
-                  onEvent: (type: string, event: IEvent) => Alert.alert('Element selected' + event.id),
+                  text: "Copier",
+                  icon: "content-copy",
+                  id: "copy",
+                  onEvent: ({ selected }: ISelectedProps) =>
+                    Alert.alert("Elements selected" + JSON.stringify(selected)),
                 },
                 {
-                  text: 'Share',
-                  icon: 'share-variant',
-                  id: 'share-variant',
-                  onEvent: (type: string, event: IEvent) => Alert.alert('Element selected' + event.id),
+                  text: "Share",
+                  icon: "share-variant",
+                  id: "share-variant",
+                  onEvent: ({ selected }: ISelectedProps) =>
+                    Alert.alert("Elements selected" + JSON.stringify(selected)),
                 },
                 {
-                  text: 'Download',
-                  icon: 'download',
-                  id: 'download',
-                  onEvent: (type: string, event: IEvent) => Alert.alert('Element selected' + event.id),
+                  text: "Download",
+                  icon: "download",
+                  id: "download",
+                  onEvent: ({ selected }: ISelectedProps) =>
+                    Alert.alert("Elements selected" + JSON.stringify(selected)),
                 },
               ],
             },
             {
-              filter: 'owner',
+              filter: "owner",
               items: [
                 {
-                  text: 'Back',
-                  icon: 'chevron-left1',
-                  id: 'back',
-                  onEvent: () => null, //navigation.pop(),
+                  text: "Back",
+                  icon: "chevron-left1",
+                  id: "back",
+                  onEvent: () => null,
                 },
                 {
-                  id: 'nbSelected',
+                  id: "nbSelected",
                 },
                 {
-                  id: 'separator',
+                  id: "separator",
                 },
                 {
-                  text: 'Copier',
-                  icon: 'content-copy',
-                  id: 'copy',
-                  onEvent: (type: string, event: IEvent) => Alert.alert('Element selected' + event.id),
+                  text: "Edit",
+                  icon: "pencil",
+                  id: "edit",
+                  onEvent: ({ selected }: ISelectedProps) =>
+                    Alert.alert("Elements selected" + JSON.stringify(selected)),
                 },
                 {
-                  isEnabled: !ClipboardWorkspace.isEmpty(),
-                  text: 'Coller',
-                  icon: 'inbox',
-                  id: 'past',
-                  onEvent: (type: string, event: IEvent) => Alert.alert('Element selected' + event.id),
+                  text: "Delete",
+                  icon: "delete",
+                  id: "delete",
+                  onEvent: ({ selected }: ISelectedProps) =>
+                    Alert.alert("Elements selected" + JSON.stringify(selected)),
                 },
                 {
-                  text: 'Share',
-                  icon: 'share-variant',
-                  id: 'share-variant',
-                  onEvent: (type: string, event: IEvent) => Alert.alert('Element selected' + event.id),
+                  text: "Pick",
+                  icon: "package-up",
+                  id: "package-up",
+                  onEvent: ({ selected }: ISelectedProps) =>
+                    Alert.alert("Elements selected" + JSON.stringify(selected)),
                 },
                 {
-                  text: 'Download',
-                  icon: 'download',
-                  id: 'download',
-                  onEvent: (type: string, event: IEvent) => Alert.alert('Element selected' + event.id),
+                  text: "Share",
+                  icon: "share-variant",
+                  id: "share-variant",
+                  onEvent: ({ selected }: ISelectedProps) =>
+                    Alert.alert("Elements selected" + JSON.stringify(selected)),
+                },
+                {
+                  text: "Download",
+                  icon: "download",
+                  id: "download",
+                  onEvent: ({ selected }: ISelectedProps) =>
+                    Alert.alert("Elements selected" + JSON.stringify(selected)),
                 },
               ],
             },
@@ -129,9 +148,18 @@ export default connect(
     },
     {
       initialRouteParams: {
-        filter: 'root',
-        parentId: 'root',
+        filter: "root",
+        parentId: "root",
       },
-    },
-  ),
+      defaultNavigationOptions: ({ navigation }: { navigation: NavigationScreenProp<{}> }) =>
+        standardNavScreenOptions(
+          {
+            title: navigation.getParam("title") || I18n.t(config.displayName),
+            headerLeft: <HeaderAction onPress={() => navigation.pop()} name={"back"} />,
+            headerRight: <HeaderIcon name={null} hidden={true} />,
+          },
+          navigation
+        ),
+    }
+  )
 );

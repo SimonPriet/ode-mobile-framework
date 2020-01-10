@@ -1,5 +1,5 @@
-import I18n from 'i18n-js';
-import { FilterId, IFolder } from '../../types';
+import I18n from "i18n-js";
+import { FilterId, IFolder } from "../../types";
 
 export const factoryRootFolder = (filterId: FilterId): IFolder => {
   return {
@@ -8,8 +8,8 @@ export const factoryRootFolder = (filterId: FilterId): IFolder => {
     isFolder: true,
     name: I18n.t(filterId),
     number: 1,
-    owner: '',
-    ownerName: '',
-    contentType: 'text',
+    owner: "",
+    ownerName: "",
+    contentType: "text",
   };
 };

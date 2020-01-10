@@ -1,4 +1,4 @@
-import { mainNavNavigate } from "../navigation/helpers/navHelper";
+import { nainNavNavigate } from "../navigation/helpers/navHelper";
 import Tracking from "../tracking/TrackingManager";
 import { listTimeline } from "./actions/list";
 import { storedFilters, } from "./actions/storedFilters";
@@ -9,7 +9,7 @@ const openNotif = {
   "/schoolbook": async (data, latestNews) => {
     // console.log("notif schoolbook", data, latestNews);
     if (!data.resourceUri || data.resourceUri.indexOf("word") === -1) {
-      mainNavNavigate("notifications");
+      nainNavNavigate("notifications");
       return;
     }
     const wordId = data.resourceUri.split("word/")[1];
@@ -21,7 +21,7 @@ const openNotif = {
 
   "/actualites": async (data, latestNews) => {
     if (data.resourceUri.indexOf("/info") === -1) {
-      mainNavNavigate("notifications");
+      nainNavNavigate("notifications");
       return;
     }
 
@@ -74,9 +74,9 @@ const timelineNotifHandlerFactory:NotificationHandlerFactory<any,any,any> = disp
           published: item.date,
           articleId: item.id
         });
-        mainNavNavigate("newsContent", { news: item, expend: true });
+        nainNavNavigate("newsContent", { news: item, expend: true });
       } else {
-        mainNavNavigate("notifications");
+        nainNavNavigate("notifications");
       }
       return true;
     }

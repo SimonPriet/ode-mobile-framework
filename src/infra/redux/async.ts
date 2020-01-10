@@ -56,7 +56,7 @@ const actionTypeInvalidated = (actionPrefix: string) => actionPrefix + "_INVALID
 
 const actionTypeRequested = (actionPrefix: string) => actionPrefix + "_REQUESTED";
 
-const actionTypeReceived = (actionPrefix: string) => actionPrefix + "_RECEIVED";
+const actionTypeReceived = (actionPrefix: string) => actionPrefix + '_RECEIVED';
 
 const actionTypeFetchError = (actionPrefix: string) => actionPrefix + "_FETCH_ERROR";
 

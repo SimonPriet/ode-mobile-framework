@@ -1,6 +1,6 @@
 import Conf from "../../ode-framework-conf";
 import { signedFetch } from "../infra/fetchWithCache";
-import { mainNavNavigate } from "../navigation/helpers/navHelper";
+import { nainNavNavigate } from "../navigation/helpers/navHelper";
 import {
   fetchConversationThreadResetMessages,
   resetConversationThreadList
@@ -36,10 +36,10 @@ const mailboxNotifHandlerFactory :NotificationHandlerFactory<any,any,any> = disp
     await dispatch(
       await fetchConversationThreadResetMessages(message.thread_id)
     );
-    mainNavNavigate("thread");
+    nainNavNavigate("thread");
   } catch (e) {
     console.warn(e);
-    mainNavNavigate("listThreads");
+    nainNavNavigate("listThreads");
   }
   return true;
 };

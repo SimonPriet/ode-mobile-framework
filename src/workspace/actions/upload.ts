@@ -1,14 +1,14 @@
 // require the module
 
-import { asyncActionTypes } from '../../infra/redux/async';
-import config from '../config';
-import { uploadDocument } from './helpers/documents';
-import { ContentUri, FilterId } from '../types';
-import { listAction } from './list';
+import { asyncActionTypes } from "../../infra/redux/async";
+import config from "../config";
+import { uploadDocument } from "./helpers/documents";
+import { ContentUri, FilterId } from "../types";
+import { listAction } from "./list";
 
 // ACTION UPLOAD ------------------------------------------------------------------------------------
 
-export const actionTypesUpload = asyncActionTypes(config.createActionType('WORKSPACE_UPLOAD'));
+export const actionTypesUpload = asyncActionTypes(config.createActionType("WORKSPACE_UPLOAD"));
 
 export function uploadRequested() {
   return { type: actionTypesUpload.requested };
@@ -40,7 +40,7 @@ export function uploadAction(uriContent: ContentUri[] | ContentUri) {
               // better to do addReceived, but sometime data is erased by a previous long listAction
               filter: FilterId.owner,
               parentId: FilterId.owner,
-            }),
+            })
           );
           //dispatch(addReceived(backendDocumentsAdapter(dataArray), FilterId.owner));
           dispatch(uploadReceived());
