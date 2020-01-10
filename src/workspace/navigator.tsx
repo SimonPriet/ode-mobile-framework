@@ -12,7 +12,6 @@ import config from "./config";
 import { HeaderAction, HeaderIcon } from "../ui/headers/NewHeader";
 import * as React from "react";
 import { standardNavScreenOptions } from "../navigation/helpers/navScreenOptions";
-import { INavigationProps } from "../types";
 
 const mapStateToProps = (state: any) => {
   return { selected: state.selected };
