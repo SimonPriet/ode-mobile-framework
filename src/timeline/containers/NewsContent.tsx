@@ -2,7 +2,8 @@ import I18n from "i18n-js";
 import * as React from "react";
 import { Animated, Linking, ScrollView, View } from "react-native";
 
-import { createStackNavigator, NavigationActions, NavigationScreenProp } from "react-navigation";
+import { NavigationActions, NavigationScreenProp } from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack";
 import Conf from "../../../ode-framework-conf";
 import { signedFetch } from "../../infra/fetchWithCache";
 import { alternativeNavScreenOptions } from "../../navigation/helpers/navScreenOptions";
@@ -289,7 +290,7 @@ export class NewsContent extends React.Component<
   }
 
   public renderAck() {
-    const { resourceId, childrenIds } = this.props.navigation.state.params.news;
+    const { resourceId } = this.props.navigation.state.params.news;
 
     // Call it only for schoolbooks ! // TODO : reformat this component to be speicalized
     const schoolbookData = schoolbooks.find(
@@ -312,7 +313,7 @@ export class NewsContent extends React.Component<
         }}
       >
         <FlatButton
-          onPress={() => this.acknowledge(resourceId, childrenIds)}
+          onPress={() => this.acknowledge(resourceId, schoolbookData.childId)}
           title={I18n.t("schoolbook-acknowledge")}
           loading={this.state.isAcking}
         />
@@ -351,29 +352,22 @@ export class NewsContent extends React.Component<
     );
   }
 
-  public async acknowledge(wordId, childrenIds) {
+  public async acknowledge(wordId, childId) {
     // Call it only for schoolbooks !
     try {
-      // console.log("acknowledge", wordId, childrenIds);
+      // console.log("acknowledge", wordId, childId);
       this.setState({ isAcking: true });
-      const acknowledgements = childrenIds.map((id: string) => (
-        signedFetch(
-          `${
-            Conf.currentPlatform.url
-          }/schoolbook/relation/acknowledge/${wordId}/${id}`,
-          {
-            method: "POST"
-          }
-        )
-      ))
-      const responses = await Promise.all(acknowledgements);
-      
-      responses.forEach((response: Response) => {
-        if (!response.ok) {
-          throw new Error(response.status + " " + response.statusText);
+      const response = await signedFetch(
+        `${
+          Conf.currentPlatform.url
+        }/schoolbook/relation/acknowledge/${wordId}/${childId}`,
+        {
+          method: "POST"
         }
-      })
-
+      );
+      if (!response.ok) {
+        throw new Error(response.status + " " + response.statusText);
+      }
       const thisSchoolbook = schoolbooks.find(s => s.id.toString() === wordId);
       // console.log("this schoolbook", thisSchoolbook);
       if (thisSchoolbook) {
@@ -407,7 +401,7 @@ export class NewsContent extends React.Component<
     }
   }
 
-  public renderBackModal(wordId, childrenIds) {
+  public renderBackModal(wordId, childId) {
     return (
       <ModalContent>
         <ModalContentBlock>
@@ -450,7 +444,7 @@ export class NewsContent extends React.Component<
                 confirmBackSchoolbook: false,
                 forceBack: true
               });
-              await this.acknowledge(wordId, childrenIds);
+              await this.acknowledge(wordId, childId);
               requestAnimationFrame(() => {
                 /* console.log(
                 "go back",

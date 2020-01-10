@@ -8,8 +8,6 @@ import conversationThreadSelected from "./threadSelected";
 
 import { getSessionInfo } from "../../AppStore";
 
-import I18n from "i18n-js";
-
 export const actionTypeThreadCreated = mailboxConf.createActionType(
   "THREAD_CREATED"
 );
@@ -20,14 +18,13 @@ export function createThread(pickedUsers) {
       date: Date.now(),
       displayNames: pickedUsers.map((u: any) => [
         u.id,
-        u.displayName || u.name,
-        u.isGroup
+        u.displayName || u.name
       ]).concat([[getSessionInfo().userId, getSessionInfo().displayName]]),
       from: getSessionInfo().userId,
       id: "temp",
       messages: [],
       subject:
-        I18n.t("conversation-newThreadSubjectPrefix") + 
+        "Discussion avec " +
         pickedUsers
           .map(u => (u as IUser).displayName || (u as IGroup).name)
           .join(", "),
@@ -39,6 +36,7 @@ export function createThread(pickedUsers) {
       newThread,
       type: actionTypeThreadCreated
     });
+    clearPickedUsers(dispatch)();
     dispatch(conversationThreadSelected(newThread.id));
 
     return newThread;
@@ -51,17 +49,8 @@ export const actionTypeLoadVisibles = mailboxConf.createActionType(
 
 export const loadVisibles = dispatch => async () => {
   const visibles = await fetchJSONWithCache(`/conversation/visible`);
-  const groups = visibles && visibles.groups.map(group => ({
-    ...group,
-    isGroup: true
-  }))
-  const users = visibles && visibles.users.map(user => ({
-    ...user,
-    isGroup: false
-  }))
-
   dispatch({
     type: actionTypeLoadVisibles,
-    visibles: [...groups, ...users]
+    visibles: [...visibles.groups, ...visibles.users]
   });
 };

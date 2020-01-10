@@ -75,14 +75,9 @@ export interface IHomeworkPageOtherProps {
   navigation?: NavigationScreenProp<{}>;
 }
 
-interface IHomeworkPageState {
-  fetching: boolean;
-}
-
 export type IHomeworkPageProps = IHomeworkPageDataProps &
   IHomeworkPageEventProps &
-  IHomeworkPageOtherProps &
-  IHomeworkPageState;
+  IHomeworkPageOtherProps;
 
 // Main component ---------------------------------------------------------------------------------
 
@@ -102,31 +97,18 @@ export class HomeworkPage extends React.PureComponent<IHomeworkPageProps, {}> {
       this.flatList = element;
     };
   }
-  public state={
-    fetching: false
-  }
-
-  getDerivedStateFromProps(nextProps: any, prevState: any) {
-    if(nextProps.isFetching !== prevState.fetching){
-      return { fetching: nextProps.isFetching};
-   }
-   else return null;
-  }
-
-  componentDidUpdate(prevProps: any) {
-    const { isFetching } = this.props
-    if(prevProps.isFetching !== isFetching){
-      this.setState({ fetching: isFetching });
-    }
-  }
 
   // Render
 
   public render() {
-    const { isFetching, didInvalidate } = this.props;
-    const pageContent = isFetching && didInvalidate
-      ? this.renderLoading()
-      : this.renderList();
+    const pageContent =
+      this.props.tasksByDay && this.props.tasksByDay.length
+        ? this.renderList()
+        : this.props.didInvalidate
+        ? this.props.isFetching
+          ? this.renderLoading()
+          : this.renderEmptyScreen()
+        : this.renderEmptyScreen();
 
     return (
       <PageContainer>
@@ -140,14 +122,13 @@ export class HomeworkPage extends React.PureComponent<IHomeworkPageProps, {}> {
     const {
       diaryId,
       tasksByDay,
+      isFetching,
       navigation,
       onRefresh,
       onSelect,
       onScrollBeginDrag
     } = this.props;
-    const { fetching } = this.state
 
-    const isEmpty = tasksByDay && tasksByDay.length === 0;
     const data = tasksByDay ? tasksByDay.map(day => ({
       title: day.date,
       data: day.tasks.map(task => ({
@@ -158,15 +139,9 @@ export class HomeworkPage extends React.PureComponent<IHomeworkPageProps, {}> {
 
     return (
       <View style={{ flex: 1 }}>
-        {!isEmpty ?
-          <>
-            <HomeworkTimeline />
-            <View style={{ backgroundColor: CommonStyles.lightGrey, height: 15, width: "100%", position: "absolute", top: 0, zIndex: 1, marginLeft: 50 }} />
-          </>
-          : null
-        }
+        <HomeworkTimeline />
+        <View style={{ backgroundColor: CommonStyles.lightGrey, height: 15, width: "100%", position: "absolute", top: 0, zIndex: 1, marginLeft: 50 }} />
         <SectionList
-          contentContainerStyle={isEmpty ? { flex: 1 } : null}
           ref={this.setFlatListRef}
           sections={data}
           CellRendererComponent={
@@ -191,29 +166,29 @@ export class HomeworkPage extends React.PureComponent<IHomeworkPageProps, {}> {
             />
           )}
           keyExtractor={item => item.id}
-          ListFooterComponent={() => !isEmpty ? <View height={15} /> : null}
+          ListFooterComponent={() => <View height={15} />}
           refreshControl={
             <RefreshControl
-              refreshing={fetching}
-              onRefresh={() => {
-                this.setState({ fetching: true })
-                onRefresh(diaryId)
-              }}
+              refreshing={isFetching}
+              onRefresh={() => onRefresh(diaryId)}
             />
           }
           onScrollBeginDrag={() => onScrollBeginDrag()}
           stickySectionHeadersEnabled
-          ListEmptyComponent={
-            <EmptyScreen
-              imageSrc={require("../../../assets/images/empty-screen/homework.png")}
-              imgWidth={265.98}
-              imgHeight={279.97}
-              text={I18n.t("homework-emptyScreenText")}
-              title={I18n.t("homework-emptyScreenTitle")}
-            />
-          }
         />
       </View>
+    );
+  }
+
+  private renderEmptyScreen() {
+    return (
+      <EmptyScreen
+        imageSrc={require("../../../assets/images/empty-screen/homework.png")}
+        imgWidth={265.98}
+        imgHeight={279.97}
+        text={I18n.t("homework-emptyScreenText")}
+        title={I18n.t("homework-emptyScreenTitle")}
+      />
     );
   }
 

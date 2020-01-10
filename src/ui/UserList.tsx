@@ -7,7 +7,7 @@ import { Line } from './Grid';
 import { Checkbox } from './forms/Checkbox';
 import I18n from "i18n-js";
 
-export type IUser = { id: string, name: string, displayName: string, isGroup: boolean, checked: boolean };
+export type IUser = { id: string, name: string, displayName: string, checked: boolean };
 const UserName = style.text({
     fontWeight: 'bold',
     textAlignVertical: 'center',
@@ -17,10 +17,10 @@ const UserName = style.text({
     color: CommonStyles.textColor,
 });
 
-const UserLine = ({ id, displayName, name, checked, onPick, onUnpick, selectable, isGroup }) => (
+const UserLine = ({ id, displayName, name, checked, onPick, onUnpick, selectable }) => (
     <TouchableOpacity onPress={() => !checked ? onPick() : onUnpick()}>
         <Line style={{ padding: 10, alignItems: 'center' }}>
-            <SingleAvatar size={51} userId={{ id, isGroup }} />
+            <SingleAvatar size={51} userId={id} />
             <UserName numberOfLines={2}>{name || displayName}</UserName>
             {selectable && <Checkbox checked={checked} onCheck={() => onPick()} onUncheck={() => onUnpick()} />}
         </Line>
@@ -34,12 +34,13 @@ export default function UserList(props: {
     onUnpickUser?: (user: IUser) => void,
     onEndReached?: () => void
 }) {
+    let childIndex = 0;
     return (
         <FlatList
             keyboardShouldPersistTaps={'always'}
             style={{ flex: 1, borderTopColor: '#EEEEEE', borderTopWidth: 1 }}
             data={props.users}
-            keyExtractor={u => u.id}//increment in next line
+            keyExtractor={u => u.id + (childIndex++)}//increment in next line
             renderItem={(el) => <UserLine
                 selectable={props.selectable}
                 onPick={() => props.onPickUser && props.onPickUser(el.item)}

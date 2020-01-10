@@ -1,4 +1,4 @@
-import { NavigationActions, StackActions } from "react-navigation";
+import { NavigationActions } from "react-navigation";
 
 import { rootNavigatorRef } from "../../AppScreen";
 import { CurrentMainNavigationContainerComponent } from "../RootNavigator";
@@ -20,7 +20,7 @@ export const navigate = (route, params = {}) => {
  * @param route route to go
  * @param params additional parameters ot pass to navigation state
  */
-export const mainNavNavigate = (route, params = {}) => {
-  // console.log("mainNavNavigate", route);
+export const nainNavNavigate = (route, params = {}) => {
+  // console.log("nainNavNavigate", route);
   return CurrentMainNavigationContainerComponent.dispatch(NavigationActions.navigate({ routeName: route, params }));
 };

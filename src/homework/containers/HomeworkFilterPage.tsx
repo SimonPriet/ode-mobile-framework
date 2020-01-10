@@ -36,13 +36,11 @@ const mapStateToProps: (state: any) => IHomeworkFilterPageDataProps = state => {
     name: homeworkDiaryList.data[diaryId].name,
     title: homeworkDiaryList.data[diaryId].title
   }));
-  const { didInvalidate, isFetching } = homeworkDiaryList;
 
   // Format props
   return {
     diaryList: flatHomeworkDiaryList,
-    didInvalidate,
-    isFetching,
+    isFetching: homeworkDiaryList.isFetching,
     selectedDiaryId: localState.selectedDiary
   };
 };

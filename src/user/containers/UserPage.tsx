@@ -133,12 +133,7 @@ export class UserPage extends React.PureComponent<
 }
 
 export default connect(
-  (state: any) => {
-    const ret = {
-      userinfo: state.user.info
-    }
-    return ret;
-  },
+  (state: any) => ({}),
   (dispatch: Dispatch) => ({
     onLogout: () => dispatch<any>(logout())
   })

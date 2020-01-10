@@ -39,7 +39,7 @@ export default ({
   return (
     <ListItem nb={unread} onPress={() => onPress(id, displayNames, subject)}>
       <LeftPanel>
-        <BadgeAvatar avatars={findReceiversAvatars(to, from, cc, displayNames)} badgeContent={unread} />
+        <BadgeAvatar avatars={findReceivers2(to, from, cc)} badgeContent={unread} />
       </LeftPanel>
       <CenterPanel style={{ marginRight: 0, paddingRight: 0 }}>
         <Author nb={unread} numberOfLines={1}>
@@ -107,12 +107,4 @@ export const findReceivers2 = (to, from, cc) => {
     receiversSet.add(getSessionInfo().userId);
   }
   return [...receiversSet];
-};
-
-export const findReceiversAvatars = (to, from, cc, displayNames) => {
-  const receiversIds: string[] = findReceivers2(to, from, cc);
-  return receiversIds.map((receiverId: string) => ({
-    id: receiverId,
-    isGroup: displayNames.find((displayName: any) => displayName[0] === receiverId)[2],
-  }))
 };

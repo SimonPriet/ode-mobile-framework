@@ -1,7 +1,7 @@
 import style from "glamorous-native";
 import I18n from "i18n-js";
 import * as React from "react";
-import { View, ViewStyle } from "react-native";
+import { Text, View, ViewStyle } from "react-native";
 
 import { CommonStyles } from "../../styles/common/styles";
 
@@ -10,6 +10,7 @@ import TouchableOpacity from "../../ui/CustomTouchableOpacity";
 import { DateView } from "../../ui/DateView";
 import { HtmlContentView } from "../../ui/HtmlContentView";
 import { ConversationMessageStatus } from "../actions/sendMessage";
+import { Icon } from "../../ui";
 import ThreadMessageAttachment from "./ThreadMessageAttachment";
 import { getSessionInfo } from "../../AppStore";
 
@@ -17,7 +18,6 @@ const MessageBubble = ({ contentHtml, isMine }) => (
   <BubbleStyle my={isMine}>
     <HtmlContentView
       html={contentHtml}
-      emptyMessage={I18n.t("conversation-emptyMessage")}
       opts={{
         globalTextStyle: {
           color: isMine ? "white" : CommonStyles.textColor,

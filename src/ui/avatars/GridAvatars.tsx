@@ -4,10 +4,7 @@ import { Avatar, Size } from "./Avatar";
 import { ImageURISource } from "react-native";
 
 export interface IAvatarsProps {
-	users: string[] | Array<{
-		id: string;
-		isGroup: boolean;
-	}>;
+	users: Array<string | ImageURISource>;
 }
 
 export class GridAvatars extends React.Component<IAvatarsProps> {
@@ -17,8 +14,8 @@ export class GridAvatars extends React.Component<IAvatarsProps> {
 
 		if (users.length > 4) {
 			users.length = 4
-		}
-		
+        }
+        
 		return (
 			<Container>
 				{users.map((user, idx) => <Avatar size={Size.small} key={idx} index={idx} count={users.length} sourceOrId={user} />)}

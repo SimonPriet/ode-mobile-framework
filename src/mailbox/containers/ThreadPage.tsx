@@ -56,9 +56,9 @@ const mapDispatchToProps: (
 ) => IThreadPageEventProps = dispatch => {
   return {
     dispatch,
-    onGetNewer: async (threadId: string) => {
+    onGetNewer: (threadId: string) => {
       // console.log("get newer posts");
-      await dispatch(fetchConversationThreadNewerMessages(threadId));
+      dispatch(fetchConversationThreadNewerMessages(threadId));
       return;
     },
     onGetOlder: (threadId: string) => {
@@ -120,13 +120,10 @@ class ThreadPageContainer extends React.PureComponent<
     if (imageSet.size === 0) {
       imageSet.add(getSessionInfo().userId!);
     }
-    const images = [...imageSet].map((receiverId: string) => ({
-      id: receiverId,
-      isGroup: displayNames.find(displayName => displayName[0] === receiverId)![2],
-    }))
+    const images = [...imageSet];
 
     const names = images.map(el => {
-      const u = displayNames.find(dn => dn[0] === el.id);
+      const u = displayNames.find(dn => dn[0] === el);
       return u ? u[1] : I18n.t("unknown-user");
     });
 

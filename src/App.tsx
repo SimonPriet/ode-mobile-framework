@@ -1,7 +1,8 @@
 // RN Imports
 import * as React from "react";
-import {StatusBar, View} from "react-native";
+import { StatusBar, View } from "react-native";
 import * as RNLocalize from "react-native-localize";
+import "react-native-gesture-handler";
 
 // Redux
 import { Provider, connect } from "react-redux";
@@ -55,7 +56,7 @@ class AppStoreUnconnected extends React.Component<
   public render() {
     return (
       <Provider store={this.props.store}>
-        <View style={{ flex: 1, position: 'relative', backgroundColor: 'transparent' }}>
+        <View style={{ flex: 1 }}>
           <StatusBar
             backgroundColor={CommonStyles.statusBarColor}
             barStyle="light-content"

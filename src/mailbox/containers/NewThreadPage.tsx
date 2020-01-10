@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import I18n from "i18n-js";
 
 import { loadVisibles, createThread } from "../actions/createThread";
-import { pickUser, unpickUser, clearPickedUsers } from "../actions/pickUser";
+import { pickUser, unpickUser } from "../actions/pickUser";
 
 import { IUser } from "../../user/reducers";
 
@@ -24,7 +24,6 @@ interface INewThreadPageProps {
   pickedUsers: IUser[];
   pickUser: (user: IUser) => void;
   unpickUser: (user: IUser) => void;
-  clearPickedUsers: () => Promise<void>;
   navigation: NavigationScreenProp<{}>
   createAndSelectThread: (pickedUsers: any) => any;
 }
@@ -59,8 +58,8 @@ class NewThreadPage extends React.PureComponent<
   }
 
   public handleCreateThread() {
-    const threadInfo = this.props.createAndSelectThread(this.props.pickedUsers);
-    this.props.navigation.replace("thread", { threadInfo });
+    this.props.createAndSelectThread(this.props.pickedUsers);
+    this.props.navigation.replace("thread");
   }
 
   public updateHeaderProps() {
@@ -77,10 +76,6 @@ class NewThreadPage extends React.PureComponent<
   }
 
   public componentDidUpdate() {} // ComponentDidUpdate must exist if getSnapshotBeforeUpdate() does.
-
-  public componentWillUnmount() {
-    this.props.clearPickedUsers();
-  }
 
   public render() {
     return (
@@ -113,11 +108,9 @@ export default connect(
     loadVisibles: () => loadVisibles(dispatch)(),
     pickUser: (user: any) => pickUser(dispatch)(user),
     unpickUser: (user: any) => unpickUser(dispatch)(user),
-    clearPickedUsers: () => clearPickedUsers(dispatch)(),
     createAndSelectThread: (pickedUsers: any[]) => {
       const newConversation = dispatch(createThread(pickedUsers))
       dispatch(conversationThreadSelected(newConversation.id))
-      return newConversation
     }
   })
 )(NewThreadPage);

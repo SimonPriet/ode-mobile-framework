@@ -109,8 +109,11 @@ export class ThreadListPage extends React.PureComponent<
   public render() {
     const { isFetching, isRefreshing, threads } = this.props;
     const isEmpty = threads && threads.length === 0;
-    const pageContent = isEmpty && (isFetching || isRefreshing)
-      ? this.renderLoading()
+
+    const pageContent = isEmpty
+      ? isFetching || isRefreshing
+        ? this.renderLoading()
+        : this.renderEmptyScreen()
       : this.renderThreadList();
 
     return (
@@ -128,13 +131,24 @@ export class ThreadListPage extends React.PureComponent<
     return <Loading />;
   }
 
+  public renderEmptyScreen() {
+    return (
+      <EmptyScreen
+        imageSrc={require("../../../assets/images/empty-screen/conversations.png")}
+        imgWidth={571}
+        imgHeight={261}
+        text={I18n.t("conversation-emptyScreenText")}
+        title={I18n.t("conversation-emptyScreenTitle")}
+        scale={0.76}
+      />
+    );
+  }
+
   public renderThreadList() {
     const { isFetching, isRefreshing, onNextPage, onRefresh, threads } = this.props;
-    const { isSwiping } = this.state;
-    const isEmpty = threads && threads.length === 0;
+
     return (
       <FlatList
-        contentContainerStyle={isEmpty ? { flex: 1 } : null}
         refreshControl={
           <RefreshControl
             refreshing={isRefreshing}
@@ -160,18 +174,8 @@ export class ThreadListPage extends React.PureComponent<
         keyExtractor={(item: IConversationThread) => item.id}
         style={styles.grid}
         keyboardShouldPersistTaps={"always"}
-        scrollEnabled={!isSwiping}
+        scrollEnabled={!this.state.isSwiping}
         ListFooterComponent={isFetching ? this.renderLoading() : null}
-        ListEmptyComponent= {
-          <EmptyScreen
-            imageSrc={require("../../../assets/images/empty-screen/conversations.png")}
-            imgWidth={571}
-            imgHeight={261}
-            text={I18n.t("conversation-emptyScreenText")}
-            title={I18n.t("conversation-emptyScreenTitle")}
-            scale={0.76}
-          />
-        }
       />
     );
   }
@@ -239,11 +243,10 @@ export class ThreadListPage extends React.PureComponent<
   // Event Handlers
 
   public handleOpenThread(threadId: string) {
-    const { threads, onOpenThread, navigation } = this.props;
-    const threadInfo = threads!.find(el => el.id === threadId);
+    const threadInfo = this.props.threads!.find(el => el.id === threadId);
     if (!threadInfo) return;
-    onOpenThread && onOpenThread(threadId);
-    navigation.navigate("thread", { threadInfo });
+    this.props.onOpenThread && this.props.onOpenThread(threadId);
+    this.props.navigation.navigate("thread", { threadInfo });
     const isUnread = threadInfo.unread;
     Tracking.logEvent("readConversation", {
       unread: isUnread
@@ -252,9 +255,8 @@ export class ThreadListPage extends React.PureComponent<
   }
 
   public handleDeleteThread(threadId) {
-    const { onDeleteThread } = this.props;
     this.swipeRef.recenter();
-    onDeleteThread(threadId);
+    this.props.onDeleteThread(threadId);
     this.setState({
       showDeleteModal: false,
       swipedThreadId: null

@@ -74,17 +74,15 @@ export type IThreadPageProps = IThreadPageDataProps &
   IThreadPageOtherProps;
 
 export interface IThreadPageState {
-  imageCurrent: number;
-  images: Array<{ src: string; alt: string }>;
   showCarousel: boolean;
-  fetching: boolean;
+  images: Array<{ src: string; alt: string }>;
+  imageCurrent: number;
 }
 
 export const defaultState: IThreadPageState = {
   imageCurrent: 0,
   images: [],
-  showCarousel: false,
-  fetching: false,
+  showCarousel: false
 };
 
 // Main component ---------------------------------------------------------------------------------
@@ -100,20 +98,6 @@ export class ThreadPage extends React.PureComponent<
 
   public todaySeparatorAlreadyDisplayed: boolean = false;
   public onEndReachedCalledDuringMomentum = true;
-
-  getDerivedStateFromProps(nextProps: any, prevState: any) {
-    if(nextProps.isRefreshing !== prevState.fetching){
-      return { fetching: nextProps.isRefreshing};
-   }
-   else return null;
-  }
-
-  componentDidUpdate(prevProps: any) {
-    const { isRefreshing } = this.props
-    if(prevProps.isRefreshing !== isRefreshing){
-      this.setState({ fetching: isRefreshing });
-    }
-  }
 
   // Render
 
@@ -139,14 +123,15 @@ export class ThreadPage extends React.PureComponent<
 
   public renderMessageList() {
     const {
+      isFetching,
       isFetchingFirst,
+      isRefreshing,
       onGetNewer,
       onGetOlder,
       threadInfo,
       messages,
       headerHeight
     } = this.props;
-    const { fetching } = this.state;
     //TODO get focus from thread input + send action when press (should threadinputreceiver in threadinput?)
     return (
       <KeyboardAvoidingView
@@ -164,11 +149,8 @@ export class ThreadPage extends React.PureComponent<
         <FlatList
           refreshControl={
             <RefreshControl
-              refreshing={fetching}
-              onRefresh={() => {
-                this.setState({ fetching: true })
-                onGetNewer(threadInfo.id)
-              }}
+              refreshing={isRefreshing}
+              onRefresh={() => onGetNewer(threadInfo.id)}
               style={{ transform: [{ scaleY: -1 }] }}
             />
           }
@@ -192,7 +174,6 @@ export class ThreadPage extends React.PureComponent<
           emptyThread={!messages.length}
           displayPlaceholder={!isFetchingFirst}
           onReceiversTap={this.handleTapReceivers}
-          {...this.props}
         />
       </KeyboardAvoidingView>
     );

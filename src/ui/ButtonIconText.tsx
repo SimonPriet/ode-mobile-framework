@@ -1,9 +1,9 @@
-import style from 'glamorous-native';
-import * as React from 'react';
-import { CommonStyles } from '../styles/common/styles';
-import { Icon } from './icons/Icon';
-import { TextBold15 } from './text';
-import { layoutSize } from '../styles/common/layoutSize';
+import style from "glamorous-native";
+import * as React from "react";
+import { CommonStyles } from "../styles/common/styles";
+import { Icon } from "./icons/Icon";
+import { layoutSize } from "../styles/common/layoutSize";
+import { TextBold15 } from "./text";
 
 export interface ButtonTextIconProps {
   onPress: () => any;
@@ -17,18 +17,18 @@ export interface ButtonTextIconProps {
 
 const Container = style.view(
   {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-evenly",
   },
-  (props:any) => ({
+  (props: any) => ({
     style: props.style ? props.style : null,
-  }),
+  })
 );
 
 const TouchableOpacity = style.touchableOpacity({
-  alignItems: 'center',
-  justifyContent: 'center',
+  alignItems: "center",
+  justifyContent: "center",
   width: layoutSize.LAYOUT_48,
   height: layoutSize.LAYOUT_48,
   borderRadius: layoutSize.LAYOUT_24,

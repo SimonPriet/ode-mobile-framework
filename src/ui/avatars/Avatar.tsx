@@ -3,7 +3,6 @@ import * as React from "react";
 import { ImageProps, ImageURISource } from "react-native";
 import Conf from "../../../ode-framework-conf";
 import { Connection } from "../../infra/Connection";
-import { shallowEqual } from "react-redux";
 
 export enum Size {
   aligned,
@@ -126,14 +125,9 @@ const SmallContainer = style.view(
 export interface IAvatarProps {
   count?: number;
   decorate?: boolean;
-  id: string | {
-    id: string;
-    isGroup: boolean;
-  };
-  sourceOrId?: ImageURISource | string | {
-    id: string;
-    isGroup: boolean;
-  };
+  //id is obsolete (we can now use the prop sourceOrId)
+  id?: string;
+  sourceOrId?: ImageURISource | string;
   index?: number;
   large?: boolean;
   size: Size;
@@ -158,35 +152,18 @@ export class Avatar extends React.Component<
     this.state = { status: "initial" };
   }
 
-  get userId() {
-    const idProp = this.props.sourceOrId || this.props.id;
-    return idProp
-      ? typeof idProp === "string"
-        ? idProp
-        : idProp.hasOwnProperty('id')
-          ? idProp as { id: string; isGroup: boolean }
-          : undefined
-      : undefined
+  get userId() { return this.props.sourceOrId && typeof this.props.sourceOrId === "string" ? this.props.sourceOrId : this.props.id }
+
+  public componentDidMount() {
   }
 
-  public shouldComponentUpdate(nextProps, nextState) {
-    let status: string;
-    let comparedNextState: any, comparedState: any;
-    ({ status, ...comparedNextState } = nextState);
-    ({ status, ...comparedState } = this.state);
-    return !shallowEqual(comparedState, comparedNextState) || !shallowEqual(this.props, nextProps);
+  public componentWillUnmount() {
   }
 
   get isMissingSourceAndId() { return !this.props.sourceOrId && !this.props.id }
 
   get isGroup() {
-    const id = this.userId;
-    if (!id) return false;
-    return typeof id === "string"
-        ? id.length < 36
-        : id.isGroup
-        ? id.isGroup
-        : id.id.length < 36
+    return this.userId && this.userId.length < 36;
   }
 
   renderNoAvatar(width) {
@@ -268,8 +245,6 @@ export class Avatar extends React.Component<
   }
 
   render() {
-    const id = this.userId;
-    // const userId = typeof id === "string" ? id : id.id
     let width = 45;
     if (this.props.width) {
       width = this.props.width;

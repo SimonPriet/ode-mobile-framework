@@ -3,11 +3,11 @@
  * Build actions to be dispatched to the hworkspace list reducer.
  */
 
-import { asyncGetJson } from '../../../infra/redux/async';
-import { FilterId, IItems, IFolder, IFiltersParameters } from '../../types';
-import { factoryRootFolder } from './factoryRootFolder';
-import moment from 'moment';
-import Conf from '../../../../ode-framework-conf';
+import { asyncGetJson } from "../../../infra/redux/async";
+import { FilterId, IItems, IFolder, IFiltersParameters } from "../../types";
+import { factoryRootFolder } from "./factoryRootFolder";
+import moment from "moment";
+import Conf from "../../../../ode-framework-conf";
 
 // TYPE -------------------------------------------------------------------------------------------
 
@@ -43,7 +43,7 @@ const backendFoldersAdapter: (data: IBackendFolderArray) => IItems<IFolder> = da
       continue;
     }
     result[item._id] = {
-      date: moment(item.modified, 'YYYY-MM-DD HH:mm.ss.SSS')
+      date: moment(item.modified, "YYYY-MM-DD HH:mm.ss.SSS")
         .toDate()
         .getTime(),
       id: item._id,
@@ -80,13 +80,13 @@ export function getFolders(parameters: IFiltersParameters): Promise<IItems<IFold
   }
 
   const formatParameters = (parameters = {}) => {
-    let result = '?';
+    let result = "?";
     for (let key in parameters) {
       if (!(parameters as any)[key]) {
         // parameter empty
         continue;
       }
-      if (key === 'parentId' && (parameters as any)[key] in FilterId) {
+      if (key === "parentId" && (parameters as any)[key] in FilterId) {
         // its a root folder, no pass parentId
         continue;
       }

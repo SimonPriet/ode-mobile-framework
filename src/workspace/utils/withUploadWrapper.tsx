@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { uploadAction } from '../actions/upload';
-import { connect } from 'react-redux';
+import * as React from "react";
+import { uploadAction } from "../actions/upload";
+import { connect } from "react-redux";
 
 export interface IProps {
   navigation: any;
@@ -11,13 +11,13 @@ function withUploadWrapper<T extends IProps>(WrappedComponent: React.ComponentTy
   return class extends React.Component<T> {
     contentUri = [
       {
-        uri: '',
+        uri: "",
       },
     ];
 
     componentDidUpdate(): void {
       const { navigation } = this.props;
-      const contentUri: any = navigation.getParam('contentUri');
+      const contentUri: any = navigation.getParam("contentUri");
 
       if (contentUri && contentUri[0].uri !== this.contentUri[0].uri) {
         this.contentUri = contentUri;
@@ -35,5 +35,5 @@ function withUploadWrapper<T extends IProps>(WrappedComponent: React.ComponentTy
 export default (wrappedComponent: React.ComponentType<any>): React.ComponentType<any> =>
   connect(
     null,
-    { uploadAction },
+    { uploadAction }
   )(withUploadWrapper(wrappedComponent));

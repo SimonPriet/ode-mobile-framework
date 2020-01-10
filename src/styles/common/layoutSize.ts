@@ -1,7 +1,7 @@
-import { Dimensions } from 'react-native';
+import { Dimensions } from "react-native";
 
-const { width, height } = Dimensions.get('window');
-const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
+const { width, height } = Dimensions.get("window");
+const [shortDimension] = width < height ? [width, height] : [height, width];
 export const DEVICE_SCALE = shortDimension / 375;
 
 /* utils ==================================================================== */
@@ -89,6 +89,6 @@ export const layoutSize = {
   LAYOUT_375: normalize(375),
 };
 
-export const DEVICE_HEIGHT = () => Dimensions.get('window').height;
+export const DEVICE_HEIGHT = () => Dimensions.get("window").height;
 
-export const DEVICE_WIDTH = () => Dimensions.get('window').width;
+export const DEVICE_WIDTH = () => Dimensions.get("window").width;

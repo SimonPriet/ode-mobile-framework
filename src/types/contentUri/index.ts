@@ -3,4 +3,4 @@ export type ContentUri = {
   name: string;
   path?: string;
   uri: string;
-}
+};

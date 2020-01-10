@@ -1,4 +1,4 @@
-import { createStackNavigator } from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack";
 import NewThreadPage from "./containers/NewThreadPage";
 import ThreadListPage from "./containers/ThreadListPage";
 import ThreadPage from "./containers/ThreadPage";
@@ -8,9 +8,11 @@ export default createStackNavigator({
   listThreads: {
     screen: ThreadListPage
   },
+
   thread: {
     screen: ThreadPage
   },
+
   newThread: {
     screen: NewThreadPage
   },

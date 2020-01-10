@@ -2,11 +2,11 @@
  * Workspace state reducer
  * Holds a list of simple element in a simple Array
  */
-import { Reducer } from 'redux';
-import asyncReducer, { IAction } from '../../infra/redux/async';
+import { Reducer } from "redux";
+import asyncReducer, { IAction } from "../../infra/redux/async";
 
-import { actionTypesList } from '../actions/list';
-import { FilterId, IState } from '../types';
+import { actionTypesList } from "../actions/list";
+import { FilterId, IState } from "../types";
 
 const stateDefault: IState = {};
 
@@ -28,7 +28,7 @@ const itemsReducer: Reducer<IState, IAction<any>> = (state: IState = stateDefaul
         ...state,
         [action.id || FilterId.root]: asyncReducer<IState>(node, actionTypesList)(
           state[action.id || FilterId.root] || {},
-          action,
+          action
         ),
       };
     default:

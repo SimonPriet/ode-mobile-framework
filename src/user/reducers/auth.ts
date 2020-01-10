@@ -106,10 +106,8 @@ const authReducer = (
         loggingIn: false
       };
     case actionTypeLoggedOut:
-      const { error } = state
       return {
         ...stateDefault,
-        error,
         platformId: state.platformId
       };
     case actionTypeSetNotifPrefs:

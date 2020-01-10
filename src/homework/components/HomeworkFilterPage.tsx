@@ -40,7 +40,6 @@ export interface IHomeworkFilterPageDataProps {
     name: string;
   }>;
   selectedDiaryId?: string;
-  didInvalidate?: boolean;
   isFetching?: boolean;
 }
 
@@ -80,10 +79,13 @@ export class HomeworkFilterPage extends React.PureComponent<
   // render & lifecycle
 
   public render() {
-    const { isFetching, didInvalidate } = this.props;
-    const pageContent = isFetching && didInvalidate
-      ? this.renderLoading()
-      : this.renderList();
+    const pageContent = this.props.diaryList
+      ? this.props.diaryList.length === 0
+        ? this.props.isFetching
+          ? this.renderLoading()
+          : this.renderEmptyScreen()
+        : this.renderList()
+      : this.renderLoading();
 
     return (
       <PageContainer>
@@ -95,10 +97,8 @@ export class HomeworkFilterPage extends React.PureComponent<
 
   private renderList() {
     const { diaryList, selectedDiaryId, isFetching, onRefresh } = this.props;
-    const isEmpty = diaryList && diaryList.length === 0;
     return (
       <FlatList
-        contentContainerStyle={isEmpty ? { flex: 1 } : null}
         innerRef={this.setFlatListRef}
         data={diaryList}
         renderItem={({ item }) => (
@@ -140,15 +140,18 @@ export class HomeworkFilterPage extends React.PureComponent<
             onRefresh={() => onRefresh()}
           />
         }
-        ListEmptyComponent={
-          <EmptyScreen
-            imageSrc={require("../../../assets/images/empty-screen/homework.png")}
-            imgWidth={265.98}
-            imgHeight={279.97}
-            text={I18n.t("homework-emptyScreenText")}
-            title={I18n.t("homework-emptyScreenTitle")}
-          />        
-        }
+      />
+    );
+  }
+
+  private renderEmptyScreen() {
+    return (
+      <EmptyScreen
+        imageSrc={require("../../../assets/images/empty-screen/homework.png")}
+        imgWidth={265.98}
+        imgHeight={279.97}
+        text={I18n.t("homework-emptyScreenText")}
+        title={I18n.t("homework-emptyScreenTitle")}
       />
     );
   }

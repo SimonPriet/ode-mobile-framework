@@ -103,7 +103,6 @@ class ThreadListPageContainer extends React.PureComponent<
           onPress={() => { navigation.getParam('onNewThread') && navigation.getParam('onNewThread')() }}
           name="new_message"
           iconSize={24}
-          primary
         />,
         headerLeftContainerStyle: {
           alignItems: "flex-start"
@@ -158,7 +157,7 @@ class ThreadListPageContainer extends React.PureComponent<
   }
 
   public reloadList() {
-    if (this.props.isFetching || !this.props.navigation.isFocused()) return;
+    if (this.props.isFetching) return;
     this.props.dispatch(resetConversationThreadList());
   }
 
