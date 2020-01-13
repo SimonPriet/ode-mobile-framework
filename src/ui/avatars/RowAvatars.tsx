@@ -23,7 +23,10 @@ const Skipped = style.text({
 })
 
 export interface IAvatarsProps {
-	images: Array<string | ImageURISource>
+	images: Array<string | ImageURISource | {
+		id: string;
+		isGroup: boolean;
+	}>;
 	onSlideIndex?: (index: number) => void
 	size?: Size;
 }
@@ -67,7 +70,7 @@ export class RowAvatars extends React.Component<IAvatarsProps, IAvatarsState> {
 			skipped = images.length - 3;
 			images.length = 3;
         }
-        
+
 		if (size === Size.verylarge) {
 			return (
 				<Container>
@@ -88,7 +91,7 @@ export class RowAvatars extends React.Component<IAvatarsProps, IAvatarsState> {
 				</Container>
 			)
 		}
-		
+
 		return (
 			<Container>
 				{ images.map((image, idx) => <Avatar size={ Size.aligned } key={idx} index={idx} count={images.length} sourceOrId={image} />) }

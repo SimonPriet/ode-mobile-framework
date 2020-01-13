@@ -68,16 +68,6 @@ export const listTimeline = dispatch => async (
 
   // console.log("LIST timeline", page, recent);
 
-  let loading = true;
-
-  setTimeout(() => {
-    if (loading) {
-      dispatch({
-        type: "FAILED_LOAD_TIMELINE"
-      });
-    }
-  }, 8000);
-
   try {
     // await fillUserData();
 
@@ -121,7 +111,6 @@ export const listTimeline = dispatch => async (
       });
     }
 
-    loading = false;
     return newNews;
   } catch (e) {
     // tslint:disable-next-line:no-console
@@ -129,8 +118,6 @@ export const listTimeline = dispatch => async (
     dispatch({
       type: "FAILED_LOAD_TIMELINE"
     });
-
-    loading = false;
     return [];
   }
 };
