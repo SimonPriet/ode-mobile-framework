@@ -83,7 +83,7 @@ export class Items extends React.PureComponent<IItemsProps & ISelectedProps, { i
             keyExtractor={(item: IItem) => item.id}
             refreshing={isFetching}
             onRefresh={() => this.makeRequest()}
-            renderItem={({ item }) => <Item {...item} onEvent={this.props.onEvent} selected={selected[item.id]} />}
+            renderItem={({ item }) => <Item item={item} onEvent={this.props.onEvent} selected={selected[item.id]} />}
           />
         );
       }
