@@ -1,7 +1,8 @@
 // RN Imports
 import * as React from "react";
-import { StatusBar, View, AppState } from "react-native";
+import { StatusBar, View } from "react-native";
 import * as RNLocalize from "react-native-localize";
+import "react-native-gesture-handler";
 
 // Redux
 import { Provider, connect } from "react-redux";
@@ -37,7 +38,7 @@ import SplashScreen from "react-native-splash-screen";
 import { initI18n } from "./infra/i18n";
 
 // Disable Yellow Box on release builds.
-if (!__DEV__) {
+if (__DEV__) {
   // tslint:disable-next-line:no-console
   console.disableYellowBox = true;
 }
