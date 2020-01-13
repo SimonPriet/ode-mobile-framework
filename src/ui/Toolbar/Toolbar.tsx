@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { Header } from "react-navigation-stack";
 import ToolbarActionItem from "./ToolbarActionItem";
 import { DEVICE_WIDTH, layoutSize } from "../../styles/common/layoutSize";

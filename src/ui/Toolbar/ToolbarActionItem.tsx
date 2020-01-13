@@ -19,7 +19,10 @@ const Item = ({ onEvent, item, nbSelected }: any) => {
   }
 
   return (
-    <TouchableOpacity style={styles.touchPanel} onPress={() => onEvent({ type: EVENT_TYPE.MENU_SELECT, ...item })}>
+    <TouchableOpacity
+      style={styles.touchPanel}
+      onPress={() => onEvent({ type: EVENT_TYPE.MENU_SELECT, id: item.id, item })}
+    >
       <Icon color="#ffffff" size={layoutSize.LAYOUT_24} name={icon} />
     </TouchableOpacity>
   );

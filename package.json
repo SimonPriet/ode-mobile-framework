@@ -89,7 +89,7 @@
     "@babel/core": "^7.5.4",
     "@babel/runtime": "^7.5.4",
     "@jumpn/react-native-jetifier": "^0.1.4",
-    "@react-native-community/eslint-config": "^0.0.5",
+    "@react-native-community/eslint-config": "^0.0.6",
     "@types/i18n-js": "^3.0.1",
     "@types/jest": "^24.0.18",
     "@types/mime": "^2.0.1",

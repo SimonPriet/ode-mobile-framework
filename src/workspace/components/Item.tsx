@@ -1,7 +1,7 @@
 import * as React from "react";
 import { View, StyleSheet } from "react-native";
 import I18n from "i18n-js";
-import { IEventProps, IItem, EVENT_TYPE } from "../types";
+import { IEventProps, EVENT_TYPE } from "../types";
 
 import { Text, NestedText } from "../../ui/text";
 import { CenterPanel, LeftIconPanel, ListItem } from "../../ui/ContainerContent";
@@ -24,14 +24,14 @@ const style = StyleSheet.create({
   author: { flex: 3, alignItems: "flex-end" },
 });
 
-export const Item = ({ onEvent, ...item }: IItem & IEventProps & ISelectedProps) => {
-  const { id, isFolder, name, date, ownerName = "", contentType, selected } = item;
+export const Item = ({ onEvent, item, selected }: IEventProps & ISelectedProps & any) => {
+  const { id, isFolder, name, date, ownerName = "", contentType } = item;
   const longOwnerName = `${I18n.t("by")}${ownerName}`;
 
   return (
     <ListItem
-      onLongPress={() => onEvent({ type: EVENT_TYPE.LONG_SELECT, ...item })}
-      onPress={() => onEvent({ type: EVENT_TYPE.SELECT, ...item })}
+      onLongPress={() => onEvent({ type: EVENT_TYPE.LONG_SELECT, id: item.id, item })}
+      onPress={() => onEvent({ type: EVENT_TYPE.SELECT, id: item.id, item })}
       style={{ backgroundColor: selected ? "#eee" : "#fff" }}
     >
       <LeftIconPanel>{renderIcon(id, isFolder, name, contentType)}</LeftIconPanel>

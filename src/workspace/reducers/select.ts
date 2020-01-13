@@ -2,21 +2,16 @@
  * Workspace selection state reducer
  * Holds a list of selected item in a simple Array
  */
-import { Reducer } from "redux";
+import { SELECT_ACTION_TYPE, SELECT_CLEAR_ACTION_TYPE } from "../actions/select";
+import { IItem } from "../types";
+import { IAction } from "../../infra/redux/async";
+import {IId} from "../../types";
 
-import { SELECT_ACTION_TYPE, SELECT_CLEAR_ACTION_TYPE, SelectAction } from "../actions/select";
-import { IFile } from "../types";
+export type ISelectState<T> = {
+  [key: string]: T;
+};
 
-export interface ISelectState {
-  [key: string]: IFile;
-}
-
-const stateDefault: ISelectState = {};
-
-const selectReducer: Reducer<ISelectState, SelectAction> = (
-  state: ISelectState = stateDefault,
-  action: SelectAction
-) => {
+export default (state: ISelectState<IItem> = {}, action: IAction<IItem> & IId) => {
   switch (action.type) {
     case SELECT_CLEAR_ACTION_TYPE:
       return {};
@@ -30,11 +25,9 @@ const selectReducer: Reducer<ISelectState, SelectAction> = (
       }
       return {
         ...state,
-        [action.id]: state[action.id] ? undefined : action, // le undefined ne marche pas!!!!!
+        [action.id]: action,
       };
     default:
       return state;
   }
 };
-
-export default selectReducer;

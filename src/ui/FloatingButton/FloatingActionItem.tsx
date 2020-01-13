@@ -11,7 +11,10 @@ const Item = ({ onEvent, item }: IEventProps & any) => {
   const { icon, text } = item as IMenuItem;
 
   return (
-    <TouchableOpacity style={style.touchPanel} onPress={() => onEvent({ type: EVENT_TYPE.MENU_SELECT, ...item })}>
+    <TouchableOpacity
+      style={style.touchPanel}
+      onPress={() => onEvent({ type: EVENT_TYPE.MENU_SELECT, id: item.id, item })}
+    >
       <LeftIconPanel style={style.leftPanel}>
         <Icon color="#ffffff" size={layoutSize.LAYOUT_28} name={icon} />
       </LeftIconPanel>
