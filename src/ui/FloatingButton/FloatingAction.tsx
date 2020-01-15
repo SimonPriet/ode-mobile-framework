@@ -65,7 +65,7 @@ class FloatingAction extends Component<IFloatingProps & INbSelected, IState> {
     }
 
     return (
-      <ButtonIconText style={styles.button} name={iconName} onPress={this.animateButton} size={layoutSize.LAYOUT_20} />
+      <ButtonIconText style={styles.button} name={iconName} onPress={this.animateButton} size={layoutSize.LAYOUT_18} />
     );
   }
 

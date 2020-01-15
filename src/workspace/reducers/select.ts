@@ -16,7 +16,7 @@ export default (state: ISelectState<IItem> = {}, action: IAction<IItem> & IId) =
     case SELECT_CLEAR_ACTION_TYPE:
       return {};
     case SELECT_ACTION_TYPE:
-      if (action.id === null) {
+      if (action.id === "") {
         return {};
       }
       if (state[action.id]) {

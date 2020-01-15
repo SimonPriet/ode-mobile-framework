@@ -14,6 +14,7 @@ import { IMenuItem } from "../../ui/types";
 import { FloatingAction } from "../../ui/FloatingButton";
 import { ToolbarAction } from "../../ui/Toolbar";
 import { ISelectState } from "../reducers/select";
+import { ConfigDialog } from "../../ui/ConfigDialog";
 
 export interface IProps {
   navigation: any;
@@ -23,6 +24,11 @@ export interface IProps {
 
 function withMenuWrapper<T extends IProps>(WrappedComponent: React.ComponentType<T>): React.ComponentType<T> {
   return class extends React.Component<T> {
+    configDialog = null;
+    state = {
+      refresh: false,
+    };
+
     getMenuItems(idMenu: string): IMenuItem[] {
       const { navigation } = this.props;
       const popupItems = navigation.getParam(idMenu) || [];
@@ -57,11 +63,21 @@ function withMenuWrapper<T extends IProps>(WrappedComponent: React.ComponentType
           return;
 
         case EVENT_TYPE.MENU_SELECT:
-          if (item.id === "back") {
+          const menuItem = item;
+
+          if (menuItem.id === "back") {
             selectAction(null);
+            return;
           } // deselect items
 
-          item.onEvent({ ...item, navigation, selected });
+          // check to see if dialog
+          if (menuItem.dialog) {
+            // this.configDialog = new ConfigDialog({ item, selected, navigation });
+            this.configDialog = React.createElement(ConfigDialog, { item, selected, navigation }, null);
+            this.setState({ refresh: !this.state.refresh });
+          } else {
+            menuItem.onEvent({ navigation, selected });
+          }
           return;
       }
     }
@@ -77,6 +93,7 @@ function withMenuWrapper<T extends IProps>(WrappedComponent: React.ComponentType
           <WrappedComponent {...this.props as T} onEvent={this.handleEvent.bind(this)} />
           <FloatingAction menuItems={menuItems} onEvent={this.handleEvent.bind(this)} nbSelected={nbSelected} />
           <ToolbarAction menuItems={toolbarItems} onEvent={this.handleEvent.bind(this)} nbSelected={nbSelected} />
+          {this.configDialog}
         </View>
       );
     }

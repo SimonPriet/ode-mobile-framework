@@ -12,6 +12,7 @@ import config from "./config";
 import { HeaderAction, HeaderIcon } from "../ui/headers/NewHeader";
 import * as React from "react";
 import { standardNavScreenOptions } from "../navigation/helpers/navScreenOptions";
+import t from "tcomb-form-native";
 
 const mapStateToProps = (state: any) => {
   return { selected: state.selected };
@@ -42,6 +43,11 @@ export default connect(
                   text: "Créer dossier",
                   icon: "added_files",
                   id: "AddFolder",
+                  dialog: {
+                    title: "Créer dossier:",
+                    output: "name",
+                    ok: "Créer",
+                  },
                   onEvent: () => Alert.alert("Creer dossier"),
                 },
               ],
@@ -67,13 +73,9 @@ export default connect(
                   text: "Copier",
                   icon: "content-copy",
                   id: "copy",
-                  onEvent: ({ selected }: ISelectedProps) =>
-                    Alert.alert("Elements selected" + JSON.stringify(selected)),
-                },
-                {
-                  text: "Share",
-                  icon: "share-variant",
-                  id: "share-variant",
+                  dialog: {
+                    title: "Copier dans Documents personnel",
+                  },
                   onEvent: ({ selected }: ISelectedProps) =>
                     Alert.alert("Elements selected" + JSON.stringify(selected)),
                 },
@@ -102,9 +104,15 @@ export default connect(
                   id: "separator",
                 },
                 {
-                  text: "Edit",
+                  text: "Editer",
                   icon: "pencil",
                   id: "edit",
+                  monoselect: true,
+                  dialog: {
+                    title: "Renommer:",
+                    input: "filename",
+                    ok: "Modifier",
+                  },
                   onEvent: ({ selected }: ISelectedProps) =>
                     Alert.alert("Elements selected" + JSON.stringify(selected)),
                 },
@@ -112,20 +120,27 @@ export default connect(
                   text: "Delete",
                   icon: "delete",
                   id: "delete",
+                  dialog: {
+                    title: "Vous etes sur le point de supprimer:",
+                    ok: "Supprimer",
+                  },
                   onEvent: ({ selected }: ISelectedProps) =>
                     Alert.alert("Elements selected" + JSON.stringify(selected)),
                 },
                 {
-                  text: "Pick",
+                  text: "Copier",
+                  icon: "content-copy",
+                  id: "copy",
+                  dialog: {
+                    title: "Copier dans Documents personnel",
+                  },
+                  onEvent: ({ selected }: ISelectedProps) =>
+                    Alert.alert("Elements selected" + JSON.stringify(selected)),
+                },
+                {
+                  text: "Move",
                   icon: "package-up",
-                  id: "package-up",
-                  onEvent: ({ selected }: ISelectedProps) =>
-                    Alert.alert("Elements selected" + JSON.stringify(selected)),
-                },
-                {
-                  text: "Share",
-                  icon: "share-variant",
-                  id: "share-variant",
+                  id: "move",
                   onEvent: ({ selected }: ISelectedProps) =>
                     Alert.alert("Elements selected" + JSON.stringify(selected)),
                 },

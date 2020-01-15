@@ -79,6 +79,7 @@
     "sax": "1.2.4",
     "saxophone": "~0.6.1",
     "stream": "0.0.2",
+    "tcomb-form-native": "^0.6.20",
     "unorm": "1.6.0"
   },
   "devDependencies": {

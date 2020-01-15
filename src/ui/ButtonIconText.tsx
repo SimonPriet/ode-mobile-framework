@@ -39,7 +39,7 @@ export const ButtonIconText = ({ name, onPress, children, size, style }: ButtonT
   return (
     <Container style={style}>
       <TouchableOpacity onPress={onPress}>
-        <Icon color="white" size={layoutSize.LAYOUT_24} name={name} />
+        <Icon color="white" size={size ? size : layoutSize.LAYOUT_24} name={name} />
       </TouchableOpacity>
       <TextBold15>{children}</TextBold15>
     </Container>
